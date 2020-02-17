@@ -28,7 +28,7 @@ Follow these steps:
 
   9. Implement your solution in src/main/java (Commit your code changes regularly as you complete requirements)
 
-  10. Right-click on the "assignment5" project in Eclipse, select "Run As" and "Spring Boot App" and select the MeritAmericaBankApp to run your main() method
+  10. Right-click on the "assignment5" project in Eclipse, select "Run As" and "Spring Boot App" to run the application (you can test your controller via Postman)
 
   11. Right-click on the "assignment5" project in Eclipse, select "Run As" and "JUnit Test" to run our tests to verify your solution
 
