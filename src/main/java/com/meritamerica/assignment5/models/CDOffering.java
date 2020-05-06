@@ -6,6 +6,10 @@ public class CDOffering {
 	private int term;
 	private double interestRate;
 	
+	public CDOffering() {
+		
+	}
+	
 	CDOffering(int term, double interestRate) {
 		//constructs the CDOffering
 		this.term = term;

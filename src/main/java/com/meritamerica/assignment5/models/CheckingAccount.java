@@ -7,6 +7,10 @@ public class CheckingAccount extends BankAccount {
 	
 	public static final double checkingInterestRate = 0.0001;
 	
+	public CheckingAccount() {
+		super(checkingInterestRate);
+	}
+	
 	
 	public CheckingAccount(double startBalance){
 		

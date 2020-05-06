@@ -1,16 +1,26 @@
 package com.meritamerica.assignment5.models;
 
+
 //import java.text.ParseException;
 //import java.text.SimpleDateFormat;
 
 public abstract class BankAccount {
-
+		
 	private double balance;
+	
+	
 	private double interestRate;
 	//private double futureBalance;
 	private long accountNumber;
 	private java.util.Date openedOn;
 	private List<Transaction> transactionList;
+	
+	
+	public BankAccount(double interestRate) {
+		this.accountNumber = MeritBank.getNextAccountNumber();
+		this.interestRate = interestRate;
+		this.openedOn = new java.util.Date();		
+	}
 	
 	public BankAccount(double balance, double interestRate) {
 		

@@ -3,15 +3,25 @@ package com.meritamerica.assignment5.models;
 
 import java.io.*;
 
+import com.meritamerica.assignment5.Exceptions.NoSuchResorceFoundException;
+
 
 
 public class MeritBank {
 	
-	public static AccountHolder[] accountHolders;
+	public static AccountHolder[] accountHolders = new AccountHolder[0];
 	public static CDOffering[] CDOfferings;
 	public static long nextAccountNumber = 12345001;
 	private static FraudQueue fraudQueue;
 	
+	
+	/*
+	public MeritBank() {
+		accountHolders = null;
+		CDOfferings = null;
+		fraudQueue = null;
+	}
+	*/
 	
 	
 	public static boolean readFromFile(String fileName) {
@@ -88,7 +98,7 @@ public class MeritBank {
 	
 	
 	
-	static boolean writeToFile(String fileName) {
+	public static boolean writeToFile(String fileName) {
 		try {
 			
 			BufferedWriter bufWrite = new BufferedWriter(new FileWriter(fileName));
@@ -119,7 +129,7 @@ public class MeritBank {
 	
 	
 	
-	static void addAccountHolder(AccountHolder accountHolder){
+	public static void addAccountHolder(AccountHolder accountHolder){
 		if(accountHolders == null){
 			AccountHolder[] freshstart = {accountHolder};
 			accountHolders = freshstart;
@@ -135,7 +145,21 @@ public class MeritBank {
 	}
 	
 	
-	static AccountHolder[] getAccountHolders(){
+	public static AccountHolder GetAccountHolderById(int incomingid) throws NoSuchResorceFoundException {
+		AccountHolder a = null;
+		if ( incomingid <= 0 || !(incomingid <= MeritBank.accountHolders.length )) {
+			throw new NoSuchResorceFoundException("Invalid ID");
+		}else {		
+			for(int i = 0 ; i < accountHolders.length ; i++) {
+				if(accountHolders[i].getId() == incomingid) {
+					a = accountHolders[i];
+				}
+			}
+		}
+		return a;
+	}	
+	
+	public static AccountHolder[] getAccountHolders(){
 		return accountHolders;
 	}
 	
@@ -148,13 +172,13 @@ public class MeritBank {
 		return CDOfferings;
 	}
 	
-	static long getNextAccountNumber(){
+	public static long getNextAccountNumber(){
 		long tempNAC = nextAccountNumber;
 		nextAccountNumber++;
 		return tempNAC;
 	}
 	
-	static long getNextAccountNumberForWriteToFileOnly() {
+	public static long getNextAccountNumberForWriteToFileOnly() {
 		return nextAccountNumber;
 	}
 	
@@ -172,12 +196,12 @@ public class MeritBank {
 	//static CDOffering getSecondBestCDOffering(double depositAmount){}
 	
 	
-	static void clearCDOfferings(){
+	public static void clearCDOfferings(){
 		CDOfferings = null;
 	}
 	
 	
-	static void setCDOfferings(CDOffering[] offerings){
+	public static void setCDOfferings(CDOffering[] offerings){
 		if(CDOfferings == null){
 			CDOfferings = offerings;
 		}else{
@@ -196,6 +220,21 @@ public class MeritBank {
 				
 	}
 	
+	public static void addCDOffering(CDOffering cd) {
+		CDOffering[] temp = new CDOffering[CDOfferings.length + 1];	
+		
+		if(CDOfferings == null) {
+			CDOfferings = temp;
+		
+		}else {
+			for(int i = 0 ; i < CDOfferings.length ; i++) {
+				temp[i] = CDOfferings[i];
+			}
+			temp[CDOfferings.length + 1] = cd;
+		}
+		
+	}
+
 	public static double recursiveFutureValue(double amount, int years, double interestRate) {
 		
 

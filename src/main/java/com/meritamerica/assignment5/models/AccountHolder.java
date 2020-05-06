@@ -1,15 +1,35 @@
 package com.meritamerica.assignment5.models;
 
+import org.hibernate.validator.constraints.NotBlank;
+
+
 public class AccountHolder {
 	
+	public static int nextid = 0;
+	
+	
+	private int id;
+	
+	@NotBlank(message = "firtName is missing")
 	private String firstName;
+		
 	private String middleName;
+	
+	@NotBlank(message = "lastName is missing")
 	private String lastName;
+	
+	@NotBlank(message = "ssn is missing")
 	private String ssn;
-	private BankAccount[] bankAccounts ;
+	private BankAccount[] bankAccounts;
 	
 	
 	
+	public AccountHolder() {
+		this.id = ++nextid;
+		this.firstName = "";
+		this.lastName = "";
+		this.ssn = "";
+	}
 	
 	//need to adjust this to suit the calls when I find out what they are.
 	public AccountHolder(String firstName, String middleName, String lastName, String ssn){
@@ -18,6 +38,7 @@ public class AccountHolder {
 		this.lastName = lastName;
 		this.ssn = ssn;
 		bankAccounts = null;
+		this.id = ++nextid;
 	}
 	
 	public AccountHolder(String firstName, String middleName, String lastName, String ssn, double checkingAccountOpeningBalance, double savingsAccountOpeningBalance) {
@@ -30,6 +51,7 @@ public class AccountHolder {
 		SavingsAccount SA1 = new SavingsAccount(savingsAccountOpeningBalance);
 		BankAccount[] ba = {CA1 , SA1};
 		setBankAccounts(ba);
+		this.id = ++nextid;
 		
 	}
 
@@ -42,7 +64,7 @@ public class AccountHolder {
 		this.ssn = ssn;
 		BankAccount[] ba = {starterBankAccount};
 		setBankAccounts(ba);
-		
+		this.id = ++nextid;
 	}
 	
     public AccountHolder (String firstName, String middleName, String lastName, String ssn , BankAccount starterBankAccount , BankAccount seccountBankAccount){
@@ -53,7 +75,7 @@ public class AccountHolder {
 		this.ssn = ssn;
 		BankAccount[] ba = {starterBankAccount , seccountBankAccount};
 		setBankAccounts(ba);
-		
+		this.id = ++nextid;
     }
 	
 	
@@ -220,7 +242,24 @@ public class AccountHolder {
 		return bankAccounts;
 	}
 	
+	
 		
+	public static int getNextid() {
+		return nextid;
+	}
+
+	public static void setNextid(int nextid) {
+		AccountHolder.nextid = nextid;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
@@ -256,22 +295,7 @@ public class AccountHolder {
 		return ssn;
 	}
 	
-	public int getNumberOfCDAccounts() {
-		
-		int counterCDA = 0;
-		if(bankAccounts != null){
-			for(BankAccount ba : bankAccounts) {
-						
-				Class<? extends BankAccount> c = ba.getClass();
-				if(c == CDAccount.class) {
-					counterCDA++;
-				}
-			}
-	
-		}
-		return counterCDA;
-		
-	}
+
 	
 	public int getNumberOfCheckingAccounts() {
 		
@@ -289,6 +313,25 @@ public class AccountHolder {
 		return counterCA;
 	}
 	
+	public CheckingAccount[] getTheCheckingAccounts(AccountHolder a) {
+		CheckingAccount[] c = new CheckingAccount[a.getNumberOfCheckingAccounts()];
+		int counter = 0;
+			if(a.bankAccounts != null){
+				for(BankAccount ba : a.bankAccounts) {
+							
+					Class<? extends BankAccount> d = ba.getClass();
+					if(d == CDAccount.class) {
+					c[counter] = (CheckingAccount) ba;
+					counter++;
+					}
+				}
+		
+			}
+		
+		return c;
+	}
+
+	
 	public int getNumberOfSavingsAccounts() {
 		
 		int counterSA = 0;
@@ -305,7 +348,64 @@ public class AccountHolder {
 		return counterSA;
 	}
 	
+
 	
+
+	public SavingsAccount[] getTheSavingsAccounts(AccountHolder a) {
+		SavingsAccount[] c = new SavingsAccount[a.getNumberOfSavingsAccounts()];
+		int counter = 0;
+			if(a.bankAccounts != null){
+				for(BankAccount ba : a.bankAccounts) {
+							
+					Class<? extends BankAccount> d = ba.getClass();
+					if(d == CDAccount.class) {
+					c[counter] = (SavingsAccount) ba;
+					counter++;
+					}
+				}
+		
+			}
+		
+		return c;
+	}
+
+	public int getNumberOfCDAccounts() {
+		
+		int counterCDA = 0;
+		if(bankAccounts != null){
+			for(BankAccount ba : bankAccounts) {
+						
+				Class<? extends BankAccount> c = ba.getClass();
+				if(c == CDAccount.class) {
+					counterCDA++;
+				}
+			}
+	
+		}
+		return counterCDA;
+		
+	}
+	
+
+	
+
+	public CDAccount[] getTheCDAccounts(AccountHolder a) {
+		CDAccount[] c = new CDAccount[a.getNumberOfCDAccounts()];
+		int counter = 0;
+			if(a.bankAccounts != null){
+				for(BankAccount ba : a.bankAccounts) {
+							
+					Class<? extends BankAccount> d = ba.getClass();
+					if(d == CDAccount.class) {
+					c[counter] = (CDAccount) ba;
+					counter++;
+					}
+				}
+		
+			}
+		
+		return c;
+	}	
 	
 	public static AccountHolder[] sortAccounts(AccountHolder[] toBeSorted) {
 		AccountHolder tempAH; 
@@ -381,6 +481,7 @@ public class AccountHolder {
 		return toBeAdded;
 		
 	}
+	
 			
 			//throws Exception	
 			//Should throw a java.lang.Exception if String cannot be correctly parsed
