@@ -4,23 +4,27 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 public class CheckingAccount extends BankAccount {
+
+	private double interestRate;
 	
 	public static final double checkingInterestRate = 0.0001;
 	
 	public CheckingAccount() {
-		super(checkingInterestRate);
+		super();
+		this.interestRate = checkingInterestRate;
+		
 	}
 	
 	
 	public CheckingAccount(double startBalance){
-		
-		super(startBalance , checkingInterestRate);
+		super(startBalance);
+		this.interestRate = checkingInterestRate;		
 	}
 	
     public CheckingAccount(double startBalance , double interestRate , long accountNumber , java.util.Date startDate) {
 		
-		super(accountNumber , startBalance , interestRate , startDate);
-		
+		super(accountNumber , startBalance , startDate);
+		this.interestRate = interestRate;		
 	}
 	
 	static CheckingAccount readFromString(String accountData) {
@@ -47,6 +51,21 @@ public class CheckingAccount extends BankAccount {
 		
 		return toBeAdded;
 		
+	}
+
+
+	public double getInterestRate() {
+		return interestRate;
+	}
+
+
+	public void setInterestRate(double interestRate) {
+		this.interestRate = interestRate;
+	}
+
+
+	public static double getCheckinginterestrate() {
+		return checkingInterestRate;
 	}
 	
 

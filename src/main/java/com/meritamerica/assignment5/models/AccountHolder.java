@@ -1,6 +1,12 @@
 package com.meritamerica.assignment5.models;
 
+import java.util.ArrayList;
+
 import org.hibernate.validator.constraints.NotBlank;
+
+
+
+
 
 
 public class AccountHolder {
@@ -20,15 +26,19 @@ public class AccountHolder {
 	
 	@NotBlank(message = "ssn is missing")
 	private String ssn;
-	private BankAccount[] bankAccounts;
-	
-	
+	//private BankAccount[] bankAccounts;
+	private ArrayList<CheckingAccount> checkingAccounts = null;
+	private ArrayList<SavingsAccount> savingsAccounts = null;
+	private ArrayList<CDAccount> cdAccounts = null;
 	
 	public AccountHolder() {
 		this.id = ++nextid;
 		this.firstName = "";
 		this.lastName = "";
 		this.ssn = "";
+		checkingAccounts = new ArrayList<CheckingAccount>();
+		savingsAccounts = new ArrayList<SavingsAccount>();
+		cdAccounts = new ArrayList<CDAccount>();
 	}
 	
 	//need to adjust this to suit the calls when I find out what they are.
@@ -37,7 +47,9 @@ public class AccountHolder {
 		this.middleName = middleName;
 		this.lastName = lastName;
 		this.ssn = ssn;
-		bankAccounts = null;
+		checkingAccounts = new ArrayList<CheckingAccount>();
+		savingsAccounts = new ArrayList<SavingsAccount>();
+		cdAccounts = new ArrayList<CDAccount>();
 		this.id = ++nextid;
 	}
 	
@@ -47,110 +59,90 @@ public class AccountHolder {
 		this.middleName = middleName;
 		this.lastName = lastName;
 		this.ssn = ssn;
-		CheckingAccount CA1 = new CheckingAccount(checkingAccountOpeningBalance);
-		SavingsAccount SA1 = new SavingsAccount(savingsAccountOpeningBalance);
-		BankAccount[] ba = {CA1 , SA1};
-		setBankAccounts(ba);
+		checkingAccounts = new ArrayList<CheckingAccount>();
+		savingsAccounts = new ArrayList<SavingsAccount>();
+		cdAccounts = new ArrayList<CDAccount>();		
+		CheckingAccount ca1 = new CheckingAccount(checkingAccountOpeningBalance);
+		SavingsAccount sa1 = new SavingsAccount(savingsAccountOpeningBalance);
+		addCheckingAccounts(ca1);
+		addSavingsAccounts(sa1);
 		this.id = ++nextid;
 		
 	}
-
-
-	public AccountHolder (String firstName, String middleName, String lastName, String ssn , BankAccount starterBankAccount){
-		
-		this.firstName = firstName;
-		this.middleName = middleName;
-		this.lastName = lastName;
-		this.ssn = ssn;
-		BankAccount[] ba = {starterBankAccount};
-		setBankAccounts(ba);
-		this.id = ++nextid;
-	}
-	
-    public AccountHolder (String firstName, String middleName, String lastName, String ssn , BankAccount starterBankAccount , BankAccount seccountBankAccount){
-		
-		this.firstName = firstName;
-		this.middleName = middleName;
-		this.lastName = lastName;
-		this.ssn = ssn;
-		BankAccount[] ba = {starterBankAccount , seccountBankAccount};
-		setBankAccounts(ba);
-		this.id = ++nextid;
-    }
-	
 	
 	
 	public double getCombinedBalance() {
-		double holdersTotal = 0;
-			if(bankAccounts != null){
-				for(int i = 0 ; i < bankAccounts.length ; i++){
-					holdersTotal += bankAccounts[i].getBalance();
-				}
+		double total = 0;
+		if(checkingAccounts != null) {
+			for(CheckingAccount ca : checkingAccounts) {
+				total = total + ca.getBalance();
 			}
-		return holdersTotal;
+		}
+		if(savingsAccounts != null) {
+			for(SavingsAccount sa : savingsAccounts) {
+				total = total + sa.getBalance();
+			}
+		}
+		if(cdAccounts != null) {
+			for(CDAccount cda : cdAccounts) {
+				total = total + cda.getBalance();
+			}
+		}
+		return total;
+	}
+		
+	public void addCheckingAccounts(CheckingAccount ca){
+		checkingAccounts.add(ca);
+		
 	}
 	
-    
-    
-    
-	public void setBankAccounts(BankAccount[] BA){
-		if(bankAccounts == null){
-			bankAccounts = BA;			
-		}else{
-			BankAccount[] temp = new BankAccount[bankAccounts.length + BA.length];
-			for(int i = 0 ; i < bankAccounts.length ; i++){
-				temp[i] = bankAccounts[i];
-			}
-			for(int i = bankAccounts.length ; i < bankAccounts.length + BA.length ; i++){
-				temp[i] = BA[i - bankAccounts.length];
-			}
-			bankAccounts = temp;
-		}
-		
-		
+	public void addSavingsAccounts(SavingsAccount sa){
+		savingsAccounts.add(sa);
+	}
+	
+	public void addCDAccounts(CDAccount cda){
+		cdAccounts.add(cda);		
 	}
 	
 	public CheckingAccount addCheckingAccount(double startBalance) throws ExceedsCombinedBalanceLimitException {
 		if(getCombinedBalance() + startBalance >= ExceedsCombinedBalanceLimitException.getCombinedbalancelimit()){
 			throw new ExceedsCombinedBalanceLimitException();
 		}
-		CheckingAccount toBeAdded = new CheckingAccount(startBalance);
-		BankAccount[] temp = {toBeAdded};
-		setBankAccounts(temp);
+		CheckingAccount e = new CheckingAccount(startBalance);
+		checkingAccounts.add(e);
 		
 		//adds deposit to transaction list
-		DepositTransaction dt = new DepositTransaction(toBeAdded , startBalance);
-		toBeAdded.addTransaction(dt);
+		DepositTransaction dt = new DepositTransaction(e , startBalance);
+		e.addTransaction(dt);
 		
 		if(startBalance > FraudQueue.getExcessiveAmount()){
 			MeritBank.addToFraudQueue(dt);
 			
 		}
 			
-		return toBeAdded;
+		return e;
 		
 	}
 	
-	public CheckingAccount addCheckingAccount(CheckingAccount CheckingAccount) throws ExceedsCombinedBalanceLimitException {
-		Double balance = CheckingAccount.getBalance();
+	public CheckingAccount addCheckingAccount(CheckingAccount ca) throws ExceedsCombinedBalanceLimitException {
+		Double balance = ca.getBalance();
 		
 		if(getCombinedBalance() + balance >= ExceedsCombinedBalanceLimitException.getCombinedbalancelimit()){
 			throw new ExceedsCombinedBalanceLimitException();
 		}
+		checkingAccounts.add(ca);
 		
-		BankAccount[] temp = {CheckingAccount};
-		setBankAccounts(temp);
 		
 		//adds deposit to transaction list
-		DepositTransaction dt = new DepositTransaction(CheckingAccount , balance);
-		CheckingAccount.addTransaction(dt);
+		DepositTransaction dt = new DepositTransaction(ca , balance);
+		ca.addTransaction(dt);
 		
 		if(balance > FraudQueue.getExcessiveAmount()){
 			MeritBank.addToFraudQueue(dt);
 			
 		}		
 		
-		return CheckingAccount;
+		return ca;
 		
 	}
 	
@@ -158,55 +150,52 @@ public class AccountHolder {
 		if(getCombinedBalance() + startBalance >= ExceedsCombinedBalanceLimitException.getCombinedbalancelimit()){
 			throw new ExceedsCombinedBalanceLimitException();
 		}
-		SavingsAccount toBeAdded = new SavingsAccount(startBalance);
-		BankAccount[] temp = {toBeAdded};
-		setBankAccounts(temp);
+		SavingsAccount e = new SavingsAccount(startBalance);
+		savingsAccounts.add(e);
 		
 		//adds deposit to transaction list
-		DepositTransaction dt = new DepositTransaction(toBeAdded , startBalance);
-		toBeAdded.addTransaction(dt);
+		DepositTransaction dt = new DepositTransaction(e , startBalance);
+		e.addTransaction(dt);
 		
 		if(startBalance > FraudQueue.getExcessiveAmount()){
 			MeritBank.addToFraudQueue(dt);
 			
 		}		
 		
-		return toBeAdded;
+		return e;
 	}
 	
-	public SavingsAccount addSavingsAccount(SavingsAccount SavingsAccount) throws ExceedsCombinedBalanceLimitException {
-		Double balance = SavingsAccount.getBalance();
+	public SavingsAccount addSavingsAccount(SavingsAccount sa) throws ExceedsCombinedBalanceLimitException {
+		Double balance = sa.getBalance();
 		
 		if(getCombinedBalance() + balance >= ExceedsCombinedBalanceLimitException.getCombinedbalancelimit()){
 			throw new ExceedsCombinedBalanceLimitException();
 		}
-		
-		BankAccount[] temp = {SavingsAccount};
-		setBankAccounts(temp);
+		savingsAccounts.add(sa);
 		
 		//adds deposit to transaction list
-		DepositTransaction dt = new DepositTransaction(SavingsAccount , balance);
-		SavingsAccount.addTransaction(dt);
+		DepositTransaction dt = new DepositTransaction(sa , balance);
+		sa.addTransaction(dt);
 		
 		if(balance > FraudQueue.getExcessiveAmount()){
 			MeritBank.addToFraudQueue(dt);
 			
 		}		
 		
-		return SavingsAccount;
+		return sa;
 		
 	}	
 	
 	public CDAccount addCDAccount(CDOffering cDOffering , double startBalance) throws ExceedsFraudSuspicionLimitException , NegativeAmountException {
 		
-		CDAccount toBeAdded = new CDAccount(cDOffering , startBalance);
-		BankAccount[] temp = {toBeAdded};
-		setBankAccounts(temp);
+
+		CDAccount e = new CDAccount(cDOffering , startBalance);
+		cdAccounts.add(e);
 		
 		//adds deposit to transaction list
-		Double balance = toBeAdded.getBalance();
-		DepositTransaction dt = new DepositTransaction(toBeAdded , balance);
-		toBeAdded.addTransaction(dt);
+		Double balance = e.getBalance();
+		DepositTransaction dt = new DepositTransaction(e , balance);
+		e.addTransaction(dt);
 		
 		if(balance > FraudQueue.getExcessiveAmount()){
 			MeritBank.addToFraudQueue(dt);
@@ -214,36 +203,56 @@ public class AccountHolder {
 		}	
 		
 		
-		return toBeAdded;				
+		return e;				
 				
 	}
 	
-	public CDAccount addCDAccount(CDAccount CDAccount) {
+	public CDAccount addCDAccount(CDAccount cda) {
 		
-		BankAccount[] temp = {CDAccount};
-		setBankAccounts(temp);
-		
+		cdAccounts.add(cda);
 		//adds deposit to transaction list
-		Double balance = CDAccount.getBalance();
-		DepositTransaction dt = new DepositTransaction(CDAccount , balance);
-		CDAccount.addTransaction(dt);		
+		Double balance = cda.getBalance();
+		DepositTransaction dt = new DepositTransaction(cda , balance);
+		cda.addTransaction(dt);		
 		
 		if(balance > FraudQueue.getExcessiveAmount()){
 			MeritBank.addToFraudQueue(dt);
 			
 		}	
 		
-		return CDAccount;				
+		return cda;				
 				
 	}
 	
 	
-	public BankAccount[] getBankAccounts() {
-		return bankAccounts;
-	}
+	
 	
 	
 		
+	public ArrayList<CheckingAccount> getCheckingAccounts() {
+		return checkingAccounts;
+	}
+
+	public void setCheckingAccounts(ArrayList<CheckingAccount> checkingAccounts) {
+		this.checkingAccounts = checkingAccounts;
+	}
+
+	public ArrayList<SavingsAccount> getSavingsAccounts() {
+		return savingsAccounts;
+	}
+
+	public void setSavingsAccounts(ArrayList<SavingsAccount> savingsAccounts) {
+		this.savingsAccounts = savingsAccounts;
+	}
+
+	public ArrayList<CDAccount> getCdAccounts() {
+		return cdAccounts;
+	}
+
+	public void setCdAccounts(ArrayList<CDAccount> cdAccounts) {
+		this.cdAccounts = cdAccounts;
+	}
+
 	public static int getNextid() {
 		return nextid;
 	}
@@ -298,115 +307,31 @@ public class AccountHolder {
 
 	
 	public int getNumberOfCheckingAccounts() {
-		
-		int counterCA = 0;
-		if(bankAccounts != null){
-			for(BankAccount ba : bankAccounts) {
-						
-				Class<? extends BankAccount> c = ba.getClass();
-				if(c == CDAccount.class) {
-					counterCA++;
-				}
-			}
-	
+		if(checkingAccounts != null) {
+			return checkingAccounts.size();
+		}else {
+			return 0;
 		}
-		return counterCA;
 	}
-	
-	public CheckingAccount[] getTheCheckingAccounts(AccountHolder a) {
-		CheckingAccount[] c = new CheckingAccount[a.getNumberOfCheckingAccounts()];
-		int counter = 0;
-			if(a.bankAccounts != null){
-				for(BankAccount ba : a.bankAccounts) {
-							
-					Class<? extends BankAccount> d = ba.getClass();
-					if(d == CDAccount.class) {
-					c[counter] = (CheckingAccount) ba;
-					counter++;
-					}
-				}
-		
-			}
-		
-		return c;
-	}
-
 	
 	public int getNumberOfSavingsAccounts() {
-		
-		int counterSA = 0;
-		if(bankAccounts != null){
-			for(BankAccount ba : bankAccounts) {
-						
-				Class<? extends BankAccount> c = ba.getClass();
-				if(c == CDAccount.class) {
-					counterSA++;
-				}
-			}
-	
+		if(savingsAccounts != null) {
+			return savingsAccounts.size();
+		}else {
+			return 0;
 		}
-		return counterSA;
+		
 	}
 	
-
-	
-
-	public SavingsAccount[] getTheSavingsAccounts(AccountHolder a) {
-		SavingsAccount[] c = new SavingsAccount[a.getNumberOfSavingsAccounts()];
-		int counter = 0;
-			if(a.bankAccounts != null){
-				for(BankAccount ba : a.bankAccounts) {
-							
-					Class<? extends BankAccount> d = ba.getClass();
-					if(d == CDAccount.class) {
-					c[counter] = (SavingsAccount) ba;
-					counter++;
-					}
-				}
-		
-			}
-		
-		return c;
-	}
-
 	public int getNumberOfCDAccounts() {
-		
-		int counterCDA = 0;
-		if(bankAccounts != null){
-			for(BankAccount ba : bankAccounts) {
-						
-				Class<? extends BankAccount> c = ba.getClass();
-				if(c == CDAccount.class) {
-					counterCDA++;
-				}
-			}
-	
+		if(cdAccounts != null) {
+			return cdAccounts.size();
+		}else {
+			return 0;
 		}
-		return counterCDA;
-		
-	}
-	
-
-	
-
-	public CDAccount[] getTheCDAccounts(AccountHolder a) {
-		CDAccount[] c = new CDAccount[a.getNumberOfCDAccounts()];
-		int counter = 0;
-			if(a.bankAccounts != null){
-				for(BankAccount ba : a.bankAccounts) {
-							
-					Class<? extends BankAccount> d = ba.getClass();
-					if(d == CDAccount.class) {
-					c[counter] = (CDAccount) ba;
-					counter++;
-					}
-				}
-		
-			}
-		
-		return c;
 	}	
 	
+	/*
 	public static AccountHolder[] sortAccounts(AccountHolder[] toBeSorted) {
 		AccountHolder tempAH; 
 		
@@ -422,7 +347,7 @@ public class AccountHolder {
 		}
 		return toBeSorted;
 		
-	}
+	}*/
 	
 	public String writeToString() {
 		StringBuilder holderSB = new StringBuilder(firstName + "," + middleName + "," + lastName + "," + ssn + "\n");
@@ -433,30 +358,20 @@ public class AccountHolder {
 	
 		holderSB.append(counterCA + "\n");		
 		
-		for(BankAccount ba : bankAccounts) {
-			
-			Class<? extends BankAccount> c = ba.getClass();
-			if(c == CheckingAccount.class) {
-				holderSB.append(ba.writeToString() + "\n");				
-			}					
+		for(CheckingAccount ba : checkingAccounts) {
+			holderSB.append(ba.writeToString() + "\n");								
 		}
+		
 		holderSB.append(counterSA + "\n");
 		
-        for(BankAccount ba : bankAccounts) {
-			
-			Class<? extends BankAccount> c = ba.getClass();
-			if(c == SavingsAccount.class) {
-				holderSB.append(ba.writeToString() + "\n");				
-			}
+        for(SavingsAccount ba : savingsAccounts) {
+				holderSB.append(ba.writeToString() + "\n");			
         }
+        
         holderSB.append(counterCDA + "\n");
 		
-        for(BankAccount ba : bankAccounts) {
-			
-			Class<? extends BankAccount> c = ba.getClass();
-			if(c == CDAccount.class) {
+        for(CDAccount ba : cdAccounts) {
 				holderSB.append(ba.writeToString() + "\n");				
-			}
         }
                 	
 		String toBeReturned = holderSB.toString();

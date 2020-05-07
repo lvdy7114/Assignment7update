@@ -5,17 +5,26 @@ import java.text.SimpleDateFormat;
 
 public class SavingsAccount extends BankAccount {
 	
-public static final double savingsInterestRate = 0.01;
+	private double interestRate;
+	
+	public static final double savingsInterestRate = 0.01;
 	
 	
-	public SavingsAccount(double startBalance){
-		
-		super(startBalance , savingsInterestRate);
+	
+	public SavingsAccount() {
+		super();
+		this.interestRate = savingsInterestRate;
+	}
+	
+	public SavingsAccount(double startBalance){		
+		super(startBalance);
+		this.interestRate = savingsInterestRate;
 	}
 	
 	public SavingsAccount(double startBalance , double interestRate , long accountNumber , java.util.Date startDate) {
 		
-		super(accountNumber , startBalance , interestRate , startDate);
+		super(accountNumber , startBalance , startDate);
+		this.interestRate = interestRate;
 	}
 	
 	public static SavingsAccount readFromString(String accountData) {
@@ -44,6 +53,19 @@ public static final double savingsInterestRate = 0.01;
 		return toBeAdded;
 		
 	}
+
+	public double getInterestRate() {
+		return interestRate;
+	}
+
+	public void setInterestRate(double interestRate) {
+		this.interestRate = interestRate;
+	}
+
+	public static double getSavingsinterestrate() {
+		return savingsInterestRate;
+	}
+	
 		
 	
 }

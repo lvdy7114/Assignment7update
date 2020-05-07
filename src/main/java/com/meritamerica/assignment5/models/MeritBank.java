@@ -2,6 +2,7 @@ package com.meritamerica.assignment5.models;
 
 
 import java.io.*;
+import java.util.ArrayList;
 
 import com.meritamerica.assignment5.Exceptions.NoSuchResorceFoundException;
 
@@ -10,7 +11,7 @@ import com.meritamerica.assignment5.Exceptions.NoSuchResorceFoundException;
 public class MeritBank {
 	
 	public static AccountHolder[] accountHolders = new AccountHolder[0];
-	public static CDOffering[] CDOfferings;
+	public static ArrayList<CDOffering> CDOfferings = null;
 	public static long nextAccountNumber = 12345001;
 	private static FraudQueue fraudQueue;
 	
@@ -40,17 +41,17 @@ public class MeritBank {
 				
 				tempIntForProssessing = Integer.parseInt(bufRead.readLine());
 				clearCDOfferings();
-				CDOffering[] temp = new CDOffering[tempIntForProssessing];				
+				ArrayList<CDOffering> temp = new ArrayList<CDOffering>();				
 				for(int i = 0 ; i < tempIntForProssessing ; i++) {
 					
-					temp[i] = CDOffering.readFromString(bufRead.readLine());									
+					temp.add(CDOffering.readFromString(bufRead.readLine()));									
 				}				
 				setCDOfferings(temp);
 				
 				
 				
 				tempIntForProssessing = Integer.parseInt(bufRead.readLine());
-				accountHolders = null;
+				accountHolders = null;				
 				for(int i = 0 ; i < tempIntForProssessing ; i++){
 					addAccountHolder(AccountHolder.readFromString(bufRead.readLine()));
 					int secoundTempIntForProssessing = Integer.parseInt(bufRead.readLine());
@@ -59,29 +60,26 @@ public class MeritBank {
 						int thirdTempIntForProssessing = Integer.parseInt(bufRead.readLine());
 						for(int k = 0 ; k < thirdTempIntForProssessing ; k++) {
 						ch.addTransaction(Transaction.readFromString(bufRead.readLine() , ch));
-						}
-						BankAccount[] baa = {ch};
-						accountHolders[i].setBankAccounts(baa);
+						}						
+						accountHolders[i].addCheckingAccounts(ch);
 					}
 					secoundTempIntForProssessing = Integer.parseInt(bufRead.readLine());
 					for(int j = 0 ; j < secoundTempIntForProssessing ; j++){
-						SavingsAccount ch = SavingsAccount.readFromString(bufRead.readLine());
+						SavingsAccount sh = SavingsAccount.readFromString(bufRead.readLine());
 						int thirdTempIntForProssessing = Integer.parseInt(bufRead.readLine());
 						for(int k = 0 ; k < thirdTempIntForProssessing ; k++) {
-						ch.addTransaction(Transaction.readFromString(bufRead.readLine() , ch));
+						sh.addTransaction(Transaction.readFromString(bufRead.readLine() , sh));
 						}
-						BankAccount[] baa = {ch};
-						accountHolders[i].setBankAccounts(baa);
+						accountHolders[i].addSavingsAccounts(sh);
 					}
 					secoundTempIntForProssessing = Integer.parseInt(bufRead.readLine());
 					for(int j = 0 ; j < secoundTempIntForProssessing ; j++){
-						CDAccount ch = CDAccount.readFromString(bufRead.readLine());
+						CDAccount cdh = CDAccount.readFromString(bufRead.readLine());
 						int thirdTempIntForProssessing = Integer.parseInt(bufRead.readLine());
 						for(int k = 0 ; k < thirdTempIntForProssessing ; k++) {
-						ch.addTransaction(Transaction.readFromString(bufRead.readLine() , ch));
+						cdh.addTransaction(Transaction.readFromString(bufRead.readLine() , cdh));
 						}
-						BankAccount[] baa = {ch};
-						accountHolders[i].setBankAccounts(baa);
+						accountHolders[i].addCDAccounts(cdh);
 					}
 					
 				}
@@ -102,7 +100,7 @@ public class MeritBank {
 		try {
 			
 			BufferedWriter bufWrite = new BufferedWriter(new FileWriter(fileName));
-			StringBuilder lastSB = new StringBuilder(getNextAccountNumberForWriteToFileOnly() + "\n" + CDOfferings.length + "\n");
+			StringBuilder lastSB = new StringBuilder(getNextAccountNumberForWriteToFileOnly() + "\n" + CDOfferings.size() + "\n");
 			for(CDOffering cdO : CDOfferings){
 				lastSB.append(cdO.writeToString() + "\n");
 			}
@@ -163,12 +161,13 @@ public class MeritBank {
 		return accountHolders;
 	}
 	
+	/*
 	public static AccountHolder[] sortAccountHolders() {
 		return accountHolders = AccountHolder.sortAccounts(accountHolders);
 		
-	}
+	}*/
 	
-	public static CDOffering[] getCDOfferings(){
+	public static ArrayList<CDOffering> getCDOfferings(){
 		return CDOfferings;
 	}
 	
@@ -201,38 +200,22 @@ public class MeritBank {
 	}
 	
 	
-	public static void setCDOfferings(CDOffering[] offerings){
+	public static void setCDOfferings(ArrayList<CDOffering> offerings){
 		if(CDOfferings == null){
 			CDOfferings = offerings;
 		}else{
-			
-			CDOffering[] temp = new  CDOffering[CDOfferings.length + offerings.length];
-			
-			for(int i = 0 ; i < CDOfferings.length ; i++){
-				temp[i] = CDOfferings[i];
+			for (CDOffering cd : offerings) {
+				CDOfferings.add(cd);
 			}
-			
-			for(int i = CDOfferings.length ; i < CDOfferings.length + offerings.length ; i++){
-			    temp[i] = offerings[i - CDOfferings.length];
-			}
-			CDOfferings = temp;
 		}
 				
 	}
 	
 	public static void addCDOffering(CDOffering cd) {
-		CDOffering[] temp = new CDOffering[CDOfferings.length + 1];	
-		
 		if(CDOfferings == null) {
-			CDOfferings = temp;
-		
-		}else {
-			for(int i = 0 ; i < CDOfferings.length ; i++) {
-				temp[i] = CDOfferings[i];
-			}
-			temp[CDOfferings.length + 1] = cd;
+			CDOfferings = new ArrayList<CDOffering>();
 		}
-		
+		CDOfferings.add(cd);
 	}
 
 	public static double recursiveFutureValue(double amount, int years, double interestRate) {
@@ -287,7 +270,7 @@ public class MeritBank {
 		return fraudQueue;
 	}
 	
-	
+	/*
 	public BankAccount getBankAccount(long accountId) {
 		
 		
@@ -323,7 +306,7 @@ public class MeritBank {
 				
 			
 		}
-		
+		*/
 		
 				
 	

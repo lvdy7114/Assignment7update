@@ -3,28 +3,59 @@ package com.meritamerica.assignment5.models;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Size;
+import org.hibernate.validator.constraints.NotEmpty;
+
 public class CDAccount extends BankAccount {
-	
+		
+	@Min(value  = 1 , message = "term size error too small") 
 	private int term;
+	
+			
+	@DecimalMin(value = "0.0", inclusive = false , message = "interest rate size error too small")
+	@Max(value = (long) 0.9999999999 , message = "interest rate size error too big")
+	private double interestRate;
+	
+	
+	public CDAccount() {
+		super();		 
+		
+	}
 	
 	
 	public CDAccount(CDOffering offering , double openingBalance) {
-		super(openingBalance , offering.getInterestRate());
+		super(openingBalance);
+		this.interestRate = offering.getInterestRate();
 		this.term = offering.getTerm();
 	}
 	
 	public CDAccount(double startBalance , double interestRate , long accountNumber , java.util.Date startDate , int termToBeAdded) {
 		
-		super(accountNumber , startBalance , interestRate , startDate);
+		super(accountNumber , startBalance , startDate);
+		this.interestRate = interestRate;
 		this.term = termToBeAdded;
 	}
 	
 	public int getTerm() {
 		return term;
+	}	
+	
+     public double getInterestRate() {
+		return interestRate;
 	}
-	
-	
-     public double futureValue() {
+
+	public void setInterestRate(double interestRate) {
+		this.interestRate = interestRate;
+	}
+
+	public void setTerm(int term) {
+		this.term = term;
+	}
+
+	public double futureValue() {
 	    return super.futureValue(term);
 			
      }

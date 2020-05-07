@@ -2,6 +2,8 @@ package com.meritamerica.assignment5.controller;
 
 
 
+import java.util.ArrayList;
+
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
@@ -17,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.meritamerica.assignment5.Exceptions.NoSuchResorceFoundException;
 import com.meritamerica.assignment5.models.AccountHolder;
-import com.meritamerica.assignment5.models.BankAccount;
 import com.meritamerica.assignment5.models.CDAccount;
 import com.meritamerica.assignment5.models.CDOffering;
 import com.meritamerica.assignment5.models.CheckingAccount;
@@ -57,61 +58,61 @@ public class AccountHolderController {
   	
 	@PostMapping(value = "/AccountHolders/{id}/CheckingAccounts")
 	@ResponseStatus(HttpStatus.CREATED)
-	public BankAccount[] addCheckingAccountsToId(@RequestBody CheckingAccount c , @PathVariable int id) throws NoSuchResorceFoundException, ExceedsCombinedBalanceLimitException {
+	public @ResponseBody ArrayList<CheckingAccount> addCheckingAccountsToId(@PathVariable int id , @RequestBody @Valid CheckingAccount c) throws NoSuchResorceFoundException, ExceedsCombinedBalanceLimitException{
 		AccountHolder a = MeritBank.GetAccountHolderById(id);
-		a.addCheckingAccount(c.getBalance()); 
-		return a.getBankAccounts();
+		a.addCheckingAccounts(c); 
+		return a.getCheckingAccounts();
 	}  
 			
 	@GetMapping(value = "/AccountHolders/{id}/CheckingAccounts")
-	public @ResponseBody CheckingAccount[] getCheckingAccounts(@PathVariable int id) throws NoSuchResorceFoundException {
+	public @ResponseBody ArrayList<CheckingAccount> getCheckingAccounts(@PathVariable int id) throws NoSuchResorceFoundException {
 		AccountHolder a = MeritBank.GetAccountHolderById(id);
-		return a.getTheCheckingAccounts(a);
+		return a.getCheckingAccounts();
 	}
 	
 	
 	@PostMapping(value = "/AccountHolders/{id}/SavingsAccounts")
 	@ResponseStatus(HttpStatus.CREATED)
-	public BankAccount[] addSavingsAccountsToId(@RequestBody CheckingAccount c , @PathVariable int id) throws NoSuchResorceFoundException, ExceedsCombinedBalanceLimitException {
+	public @ResponseBody ArrayList<SavingsAccount> addSavingsAccountsToId(@RequestBody @Valid SavingsAccount c , @PathVariable int id) throws NoSuchResorceFoundException, ExceedsCombinedBalanceLimitException {
 		AccountHolder a = MeritBank.GetAccountHolderById(id);
-		a.addSavingsAccount(c.getBalance()); 
-		return a.getBankAccounts();
+		a.addSavingsAccounts(c); 
+		return a.getSavingsAccounts();
 	}
 	
 			
 	@GetMapping(value = "/AccountHolders/{id}/SavingsAccounts")
-	public @ResponseBody SavingsAccount[] getSavingsAccounts(@PathVariable int id) throws NoSuchResorceFoundException {
+	public @ResponseBody ArrayList<SavingsAccount> getSavingsAccounts(@PathVariable int id) throws NoSuchResorceFoundException {
 		AccountHolder a = MeritBank.GetAccountHolderById(id);
-		return a.getTheSavingsAccounts(a);
+		return a.getSavingsAccounts();
 	}
 	
 	
 	@PostMapping(value = "/AccountHolders/{id}/CDAccounts")
 	@ResponseStatus(HttpStatus.CREATED)
-	public BankAccount[] addCDAccountsToId(@RequestBody CDAccount c , @PathVariable int id) throws NoSuchResorceFoundException, ExceedsCombinedBalanceLimitException {
+	public @ResponseBody ArrayList<CDAccount> addCDAccountsToId(@RequestBody @Valid CDAccount c , @PathVariable int id) throws NoSuchResorceFoundException {
 		AccountHolder a = MeritBank.GetAccountHolderById(id);
-		a.addSavingsAccount(c.getBalance()); 
-		return a.getBankAccounts();
+		a.addCDAccounts(c); 
+		return a.getCdAccounts();
 	}
 	
 			
 	@GetMapping(value = "/AccountHolders/{id}/CDAccounts")
-	public @ResponseBody CDAccount[] getCDAccounts(@PathVariable int id) throws NoSuchResorceFoundException {
+	public @ResponseBody ArrayList<CDAccount> getCDAccounts(@PathVariable int id) throws NoSuchResorceFoundException {
 		AccountHolder a = MeritBank.GetAccountHolderById(id);
-		return a.getTheCDAccounts(a);
+		return a.getCdAccounts();
 	}
 	
 		
-	@PostMapping(value = "/CDAccounts")
+	@PostMapping(value = "/CDOfferings")
 	@ResponseStatus(HttpStatus.CREATED)
-	public CDOffering addCDOffering(@RequestBody CDOffering c) {
-		addCDOffering(c);
+	public CDOffering addCDOffering(@RequestBody @Valid CDOffering c) {
+		MeritBank.addCDOffering(c);
 		return c;
 	}
 	
 	
-	@GetMapping(value = "/CDAccounts")
-	public CDOffering[] getCDOfferings() {
+	@GetMapping(value = "/CDOfferings")
+	public ArrayList<CDOffering> getCDOfferings() {
 		return MeritBank.getCDOfferings();
 	}
 	/*

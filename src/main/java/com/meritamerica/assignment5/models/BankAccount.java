@@ -1,50 +1,52 @@
 package com.meritamerica.assignment5.models;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+
+
 
 //import java.text.ParseException;
 //import java.text.SimpleDateFormat;
 
 public abstract class BankAccount {
+	
 		
+	@Min(value = 1 , message = "balance size error too small")
+	@Max(value = 25000 , message = "balance size error too big")	
 	private double balance;
 	
-	
-	private double interestRate;
+		
 	//private double futureBalance;
 	private long accountNumber;
 	private java.util.Date openedOn;
 	private List<Transaction> transactionList;
 	
 	
-	public BankAccount(double interestRate) {
-		this.accountNumber = MeritBank.getNextAccountNumber();
-		this.interestRate = interestRate;
+	public BankAccount() {
+		this.accountNumber = MeritBank.getNextAccountNumber();		
 		this.openedOn = new java.util.Date();		
 	}
 	
-	public BankAccount(double balance, double interestRate) {
+	public BankAccount(double balance) {
 		
 		this.balance = balance;
-		this.interestRate = interestRate;
 		this.accountNumber = MeritBank.getNextAccountNumber();
 		this.openedOn = new java.util.Date();
 		
 		
 	}
 	
-	public BankAccount(double balance, double interestRate, java.util.Date accountOpenedOn) {
+	public BankAccount(double balance, java.util.Date accountOpenedOn) {
 		
-		this.balance = balance;
-		this.interestRate = interestRate;
+		this.balance = balance;		
 		this.accountNumber = MeritBank.getNextAccountNumber();
 		this.openedOn = accountOpenedOn;
 		
 	}
 	
-	public BankAccount(long accountNumber, double balance, double interestRate, java.util.Date accountOpenedOn) {
+	public BankAccount(long accountNumber, double balance, java.util.Date accountOpenedOn) {
 		
-		this.balance = balance;
-		this.interestRate = interestRate;
+		this.balance = balance;		
 		this.accountNumber = accountNumber;
 		this.openedOn = accountOpenedOn;
 		
@@ -80,16 +82,6 @@ public abstract class BankAccount {
 	public void setBalance(double balance) {
 		this.balance = balance;
 	}
-
-
-	public double getInterestRate() {
-		return interestRate;
-	}
-
-
-	public void setIntrestRate(double intrestRate) {
-		this.interestRate = intrestRate;
-	}
 	
 	
 	//methods
@@ -118,19 +110,20 @@ public abstract class BankAccount {
 		
 		return false;
 	}
-
+	
+	public abstract double getInterestRate();
 		
 	public String toString() {
 		return ("");
 	}
 
 	public double futureValue(int years) {
-		return MeritBank.recursiveFutureValue(balance, years, interestRate);
+		return MeritBank.recursiveFutureValue(balance, years, getInterestRate());
 					
 	}
 	
 	public String writeToString() {
-		StringBuilder sb = new StringBuilder(accountNumber + "," + balance + "," + interestRate + "," + openedOn + "/n");
+		StringBuilder sb = new StringBuilder(accountNumber + "," + balance + "," + getInterestRate() + "," + openedOn + "/n");
 		
 		int numberOfTransactions = transactionList.size();
 		sb.append(numberOfTransactions + "/n");
