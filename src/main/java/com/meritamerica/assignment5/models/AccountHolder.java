@@ -2,21 +2,31 @@ package com.meritamerica.assignment5.models;
 
 import java.util.ArrayList;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 import org.hibernate.validator.constraints.NotBlank;
 
 
 
-
-//kjfdf
+@Table(name="accountholders", catalog="meritbank")
+@Entity
 
 public class AccountHolder {
 	
-	public static int nextid = 0;
+	//public static int nextid = 0;
 	
-	
-	private int id;
+	@Id
+	@Column(name="id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer id;
 	
 	@NotBlank(message = "firtName is missing")
+	@Column(name="firstName")
 	private String firstName;
 		
 	private String middleName;
@@ -26,13 +36,16 @@ public class AccountHolder {
 	
 	@NotBlank(message = "ssn is missing")
 	private String ssn;
+	
 	//private BankAccount[] bankAccounts;
 	private ArrayList<CheckingAccount> checkingAccounts = null;
 	private ArrayList<SavingsAccount> savingsAccounts = null;
 	private ArrayList<CDAccount> cdAccounts = null;
 	
+	
+	
 	public AccountHolder() {
-		this.id = ++nextid;
+	//	this.id = ++nextid;
 		this.firstName = "";
 		this.lastName = "";
 		this.ssn = "";
@@ -50,7 +63,7 @@ public class AccountHolder {
 		checkingAccounts = new ArrayList<CheckingAccount>();
 		savingsAccounts = new ArrayList<SavingsAccount>();
 		cdAccounts = new ArrayList<CDAccount>();
-		this.id = ++nextid;
+	// this.id = ++nextid;
 	}
 	
 	public AccountHolder(String firstName, String middleName, String lastName, String ssn, double checkingAccountOpeningBalance, double savingsAccountOpeningBalance) {
@@ -66,7 +79,7 @@ public class AccountHolder {
 		SavingsAccount sa1 = new SavingsAccount(savingsAccountOpeningBalance);
 		addCheckingAccounts(ca1);
 		addSavingsAccounts(sa1);
-		this.id = ++nextid;
+//		this.id = ++nextid;
 		
 	}
 	
@@ -253,13 +266,7 @@ public class AccountHolder {
 		this.cdAccounts = cdAccounts;
 	}
 
-	public static int getNextid() {
-		return nextid;
-	}
-
-	public static void setNextid(int nextid) {
-		AccountHolder.nextid = nextid;
-	}
+	
 
 	public int getId() {
 		return id;

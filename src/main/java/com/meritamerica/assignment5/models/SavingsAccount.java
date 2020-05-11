@@ -3,8 +3,23 @@ package com.meritamerica.assignment5.models;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+
+@Table(name="savingsaccounts", catalog="meritbank")
+@Entity
 public class SavingsAccount extends BankAccount {
 	
+	
+	@Id
+	@Column(name="id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer id;
 	private double interestRate;
 	
 	public static final double savingsInterestRate = 0.01;
@@ -52,6 +67,15 @@ public class SavingsAccount extends BankAccount {
 		
 		return toBeAdded;
 		
+	}
+	
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 
 	public double getInterestRate() {

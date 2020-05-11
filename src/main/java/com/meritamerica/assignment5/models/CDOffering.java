@@ -1,10 +1,25 @@
 package com.meritamerica.assignment5.models;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
+
+@Table(name="cdofferings", catalog="meritbank")
+@Entity
 public class CDOffering {
+	
+	
+	@Id
+	@Column(name="id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer id;
 	
 	@Min(value  = 1 , message = "term size error too small")
 	private int term;
@@ -25,7 +40,13 @@ public class CDOffering {
 	
 	
 	
-	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
 	
 	
 	public int getTerm() {

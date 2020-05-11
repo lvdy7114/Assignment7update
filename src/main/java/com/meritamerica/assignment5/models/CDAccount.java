@@ -3,14 +3,28 @@ package com.meritamerica.assignment5.models;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotEmpty;
 
+@Table(name="cdaccounts", catalog="meritbank")
+@Entity
 public class CDAccount extends BankAccount {
 		
+	
+	@Id
+	@Column(name="id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer id;
+	
 	@Min(value  = 1 , message = "term size error too small") 
 	private int term;
 	
@@ -37,6 +51,14 @@ public class CDAccount extends BankAccount {
 		super(accountNumber , startBalance , startDate);
 		this.interestRate = interestRate;
 		this.term = termToBeAdded;
+	}
+	
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 	public int getTerm() {
