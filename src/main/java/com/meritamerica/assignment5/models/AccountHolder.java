@@ -2,11 +2,14 @@ package com.meritamerica.assignment5.models;
 
 import java.util.ArrayList;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotBlank;
@@ -15,7 +18,6 @@ import org.hibernate.validator.constraints.NotBlank;
 
 @Table(name="accountholders", catalog="meritbank")
 @Entity
-
 public class AccountHolder {
 	
 	//public static int nextid = 0;
@@ -42,16 +44,19 @@ public class AccountHolder {
 	private ArrayList<SavingsAccount> savingsAccounts = null;
 	private ArrayList<CDAccount> cdAccounts = null;
 	
-	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "id" , referencedColumnName = "id")
+	AccountHoldersContactDetails ahcd;	
 	
 	public AccountHolder() {
 	//	this.id = ++nextid;
+		
 		this.firstName = "";
 		this.lastName = "";
 		this.ssn = "";
 		checkingAccounts = new ArrayList<CheckingAccount>();
 		savingsAccounts = new ArrayList<SavingsAccount>();
-		cdAccounts = new ArrayList<CDAccount>();
+		cdAccounts = new ArrayList<CDAccount>(); 
 	}
 	
 	//need to adjust this to suit the calls when I find out what they are.

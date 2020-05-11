@@ -11,8 +11,8 @@ import com.meritamerica.assignment5.models.AccountHolder;
 //Repository for account holder in particular
 //Spring Data Jpa enforces a repository for particular model class
 public interface AccountHolderRepository extends JpaRepository <AccountHolder, Integer>{
-	
-//	List<AccountHolder> findByName(String name);
+		
+	List<AccountHolder> findByName(String name);
 
 }
 
