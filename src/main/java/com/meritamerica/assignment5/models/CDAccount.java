@@ -15,7 +15,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.NotEmpty;
 
-@Table(name="cdaccounts", catalog="meritbank")
+
 @Entity
 public class CDAccount extends BankAccount {
 		

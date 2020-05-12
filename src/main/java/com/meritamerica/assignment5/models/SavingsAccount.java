@@ -11,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 
-@Table(name="savingsaccounts", catalog="meritbank")
 @Entity
 public class SavingsAccount extends BankAccount {
 	

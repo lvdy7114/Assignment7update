@@ -16,19 +16,18 @@ import org.hibernate.validator.constraints.NotBlank;
 
 
 
-@Table(name="accountholders", catalog="meritbank")
 @Entity
 public class AccountHolder {
 	
 	//public static int nextid = 0;
 	
 	@Id
-	@Column(name="id")
+	//@Column(name="id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	
 	@NotBlank(message = "firtName is missing")
-	@Column(name="firstName")
+	//@Column(name="firstName")
 	private String firstName;
 		
 	private String middleName;
@@ -44,9 +43,8 @@ public class AccountHolder {
 	private ArrayList<SavingsAccount> savingsAccounts = null;
 	private ArrayList<CDAccount> cdAccounts = null;
 	
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "id" , referencedColumnName = "id")
-	AccountHoldersContactDetails ahcd;	
+	@OneToOne(cascade = CascadeType.ALL , mappedBy = "accountHolder")
+	AccountHoldersContactDetails contactDetails;	
 	
 	public AccountHolder() {
 	//	this.id = ++nextid;

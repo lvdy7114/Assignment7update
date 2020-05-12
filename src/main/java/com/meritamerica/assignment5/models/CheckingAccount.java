@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Table(name="checkingaccounts", catalog = "meritBank")
 @Entity
 
 public class CheckingAccount extends BankAccount {

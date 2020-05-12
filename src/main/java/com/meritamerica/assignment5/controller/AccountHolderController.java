@@ -39,6 +39,8 @@ public class AccountHolderController {
 	
 	@Autowired
 	AccountHolderRepository accrepo;
+	
+	@Autowired
 	AccountHoldersContactDetailsRepository ahcdrepo;
 	
 	
