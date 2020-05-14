@@ -1,6 +1,7 @@
 package com.meritamerica.assignment5.models;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -9,10 +10,18 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.meritamerica.assignment5.controller.AccountHolderController;
+import com.meritamerica.assignment5.repositories.CDAccountRepository;
+import com.meritamerica.assignment5.repositories.CheckingAccountRepository;
+import com.meritamerica.assignment5.repositories.SavingsAccountRepository;
 
 
 
@@ -22,12 +31,12 @@ public class AccountHolder {
 	//public static int nextid = 0;
 	
 	@Id
-	//@Column(name="id")
+	@Column(name="id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 	
 	@NotBlank(message = "firtName is missing")
-	//@Column(name="firstName")
+	@Column(name="firstName")
 	private String firstName;
 		
 	private String middleName;
@@ -39,13 +48,23 @@ public class AccountHolder {
 	private String ssn;
 	
 	//private BankAccount[] bankAccounts;
-	private ArrayList<CheckingAccount> checkingAccounts = null;
-	private ArrayList<SavingsAccount> savingsAccounts = null;
-	private ArrayList<CDAccount> cdAccounts = null;
+	//private ArrayList<CheckingAccount> checkingAccounts = null;
+	//private ArrayList<SavingsAccount> savingsAccounts = null;
+	//private ArrayList<CDAccount> cdAccounts = null;
 	
 	@OneToOne(cascade = CascadeType.ALL , mappedBy = "accountHolder")
 	AccountHoldersContactDetails contactDetails;	
 	
+	@OneToMany(cascade = CascadeType.ALL , mappedBy = "accountHolder")	
+	private List<CDAccount> cdAccounts;
+	
+	@OneToMany(cascade = CascadeType.ALL , mappedBy = "accountHolder")	
+	private List<SavingsAccount> savingsAccounts;
+	
+	@OneToMany(cascade = CascadeType.ALL , mappedBy = "accountHolder")	
+	private List<CheckingAccount> checkingAccounts;
+	
+
 	public AccountHolder() {
 	//	this.id = ++nextid;
 		
@@ -245,7 +264,7 @@ public class AccountHolder {
 	
 	
 		
-	public ArrayList<CheckingAccount> getCheckingAccounts() {
+	public List<CheckingAccount> getCheckingAccounts() {
 		return checkingAccounts;
 	}
 
@@ -253,7 +272,7 @@ public class AccountHolder {
 		this.checkingAccounts = checkingAccounts;
 	}
 
-	public ArrayList<SavingsAccount> getSavingsAccounts() {
+	public List<SavingsAccount> getSavingsAccounts() {
 		return savingsAccounts;
 	}
 
@@ -261,7 +280,7 @@ public class AccountHolder {
 		this.savingsAccounts = savingsAccounts;
 	}
 
-	public ArrayList<CDAccount> getCdAccounts() {
+	public List<CDAccount> getCdAccounts() {
 		return cdAccounts;
 	}
 
@@ -271,11 +290,12 @@ public class AccountHolder {
 
 	
 
-	public int getId() {
+
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 

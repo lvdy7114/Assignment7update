@@ -3,15 +3,17 @@ package com.meritamerica.assignment5.models;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-
 public class CheckingAccount extends BankAccount {
 
 	@Id
@@ -23,6 +25,9 @@ public class CheckingAccount extends BankAccount {
 	
 	public static final double checkingInterestRate = 0.0001;
 	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "account_holder_id")
+	private AccountHolder accountHolder;
 	
 	public CheckingAccount() {
 		super();

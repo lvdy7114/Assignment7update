@@ -3,6 +3,11 @@ package com.meritamerica.assignment5.models;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import javax.persistence.Entity;
+
+import org.junit.Ignore;
+
+
 public abstract class Transaction {
 	
 	private BankAccount sourceAccount;

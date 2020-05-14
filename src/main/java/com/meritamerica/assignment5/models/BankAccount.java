@@ -1,13 +1,18 @@
 package com.meritamerica.assignment5.models;
 
+import java.util.ArrayList;
+
+import javax.persistence.MappedSuperclass;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
+
+import org.junit.Ignore;
 
 
 
 //import java.text.ParseException;
 //import java.text.SimpleDateFormat;
-
+@MappedSuperclass
 public abstract class BankAccount {
 	
 		
@@ -19,7 +24,8 @@ public abstract class BankAccount {
 	//private double futureBalance;
 	private long accountNumber;
 	private java.util.Date openedOn;
-	private List<Transaction> transactionList;
+	
+	private ArrayList<Transaction> transactionList;
 	
 	
 	public BankAccount() {
@@ -125,10 +131,10 @@ public abstract class BankAccount {
 	public String writeToString() {
 		StringBuilder sb = new StringBuilder(accountNumber + "," + balance + "," + getInterestRate() + "," + openedOn + "/n");
 		
-		int numberOfTransactions = transactionList.size();
+		int numberOfTransactions = getTransactionList().size();
 		sb.append(numberOfTransactions + "/n");
-		while(!transactionList.isEmpty()){
-			sb.append(transactionList.dequeue() + "/n");
+		for(int i = 0 ; i < getTransactionList().size() ; i++){
+			sb.append(getTransactionList().get(i) + "/n");
 		}
 		
 		String toBeReturned = sb.toString();
@@ -136,20 +142,22 @@ public abstract class BankAccount {
 	}
 	
 	public void addTransaction(Transaction transaction) {
+		getTransactionList().add(transaction);
 		
-		if(transactionList == null){
-			Node<Transaction> n = new Node<Transaction>(transaction);
-			transactionList = new List<Transaction>(n);
-			
-		}else {
-			transactionList.enqueue(transaction);
-		}
 				
 	}
 	
-	public List<Transaction> getTransactions() {
-		return transactionList;
+	public ArrayList<Transaction> getTransactions() {
+		return getTransactionList();
 		
+	}
+
+	public ArrayList<Transaction> getTransactionList() {
+		return transactionList;
+	}
+
+	public void setTransactionList(ArrayList<Transaction> transactionList) {
+		this.transactionList = transactionList;
 	}
 
 	

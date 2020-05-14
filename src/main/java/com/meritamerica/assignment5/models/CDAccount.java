@@ -3,11 +3,14 @@ package com.meritamerica.assignment5.models;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Max;
@@ -33,6 +36,9 @@ public class CDAccount extends BankAccount {
 	@Max(value = (long) 0.9999999999 , message = "interest rate size error too big")
 	private double interestRate;
 	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "account_holder_id")
+	private AccountHolder accountHolder;
 	
 	public CDAccount() {
 		super();		 
@@ -126,8 +132,8 @@ public class CDAccount extends BankAccount {
  		
  		int numberOfTransactions = super.getTransactions().size();
 		sb.append(numberOfTransactions + "/n");
-		while(!getTransactions().isEmpty()){
-			sb.append(getTransactions().dequeue() + "/n");
+		for(int i = 0 ; i < getTransactionList().size() ; i++){
+			sb.append(getTransactionList().get(i) + "/n");
 		}
  		
  		String toBeReturned = sb.toString();

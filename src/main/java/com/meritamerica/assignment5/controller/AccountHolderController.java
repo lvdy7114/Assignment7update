@@ -30,30 +30,43 @@ import com.meritamerica.assignment5.models.MeritBank;
 import com.meritamerica.assignment5.models.SavingsAccount;
 import com.meritamerica.assignment5.repositories.AccountHolderRepository;
 import com.meritamerica.assignment5.repositories.AccountHoldersContactDetailsRepository;
+import com.meritamerica.assignment5.repositories.CDAccountRepository;
+import com.meritamerica.assignment5.repositories.CheckingAccountRepository;
+import com.meritamerica.assignment5.repositories.SavingsAccountRepository;
 
 
 
 @RestController
-@RequestMapping("/rest/accountholders")
+@RequestMapping("/funnyNameHere")
 public class AccountHolderController {
 	
 	@Autowired
-	AccountHolderRepository accrepo;
+	AccountHolderRepository accountHolderRepository;
 	
 	@Autowired
-	AccountHoldersContactDetailsRepository ahcdrepo;
+	AccountHoldersContactDetailsRepository accountHoldersContactDetailsRepository;
+	
+	public static CheckingAccountRepository checkingAccountRepository;
+	
+	public static SavingsAccountRepository savingsAccountRepository;
+	
+	public static CDAccountRepository cdAccountRepository;
+	
+	
 	
 	
 
 	@GetMapping("/ContactDetails")
 	public List<AccountHoldersContactDetails> getContactDetails() {
-		return ahcdrepo.findAll();
+		return accountHoldersContactDetailsRepository.findAll();
 	}
 	
-	@GetMapping("/all")
+	@GetMapping("/AccountHolders")
 	public List<AccountHolder> getAll() {
-		return accrepo.findAll();
+		return accountHolderRepository.findAll();
 	}
+	
+	
 	
 	
 	
@@ -62,51 +75,51 @@ public class AccountHolderController {
 		return "hello world";
 	}
   	
-  	
+  	/*
   	@GetMapping(value = "/AccountHolders")
   	public AccountHolder[] getAccountHolders() {
   		return MeritBank.getAccountHolders();
   	}
+  	*/
 
   	@PostMapping(value = "/AccountHolders")
   	@ResponseStatus(HttpStatus.CREATED)
 	public AccountHolder postAccounHolder(@RequestBody @Valid AccountHolder a) {				
-  			MeritBank.addAccountHolder(a);
+  		accountHolderRepository.save(a);
   			return a;	
   	}
   	
 	@GetMapping(value = "/AccountHolders/{id}")
 	public @ResponseBody AccountHolder getAccountHolderBytheId(@PathVariable int id) throws NoSuchResorceFoundException {
-		return MeritBank.GetAccountHolderById(id);
+		return accountHolderRepository.getOne(id);
 		
 	}
   	
 	@PostMapping(value = "/AccountHolders/{id}/CheckingAccounts")
 	@ResponseStatus(HttpStatus.CREATED)
-	public @ResponseBody ArrayList<CheckingAccount> addCheckingAccountsToId(@PathVariable int id , @RequestBody @Valid CheckingAccount c) throws NoSuchResorceFoundException, ExceedsCombinedBalanceLimitException{
-		AccountHolder a = MeritBank.GetAccountHolderById(id);
-		a.addCheckingAccounts(c); 
-		return a.getCheckingAccounts();
+	public @ResponseBody List<CheckingAccount> addCheckingAccountsToId(@PathVariable int id , @RequestBody @Valid CheckingAccount c) throws NoSuchResorceFoundException, ExceedsCombinedBalanceLimitException{
+		AccountHolder a = accountHolderRepository.getOne(id); 
+		a.addCheckingAccount(c); 
+		return checkingAccountRepository.findAll();
 	}  
 			
 	@GetMapping(value = "/AccountHolders/{id}/CheckingAccounts")
-	public @ResponseBody ArrayList<CheckingAccount> getCheckingAccounts(@PathVariable int id) throws NoSuchResorceFoundException {
-		AccountHolder a = MeritBank.GetAccountHolderById(id);
+	public @ResponseBody List<CheckingAccount> getCheckingAccounts(@PathVariable int id) throws NoSuchResorceFoundException {
+		AccountHolder a = accountHolderRepository.getOne(id);
 		return a.getCheckingAccounts();
 	}
 	
 	
 	@PostMapping(value = "/AccountHolders/{id}/SavingsAccounts")
 	@ResponseStatus(HttpStatus.CREATED)
-	public @ResponseBody ArrayList<SavingsAccount> addSavingsAccountsToId(@RequestBody @Valid SavingsAccount c , @PathVariable int id) throws NoSuchResorceFoundException, ExceedsCombinedBalanceLimitException {
-		AccountHolder a = MeritBank.GetAccountHolderById(id);
-		a.addSavingsAccounts(c); 
-		return a.getSavingsAccounts();
+	public @ResponseBody List<SavingsAccount> addSavingsAccountsToId(@RequestBody @Valid SavingsAccount c , @PathVariable int id) throws NoSuchResorceFoundException, ExceedsCombinedBalanceLimitException {
+		savingsAccountRepository.save(c);
+		return savingsAccountRepository.findAll();
 	}
 	
 			
 	@GetMapping(value = "/AccountHolders/{id}/SavingsAccounts")
-	public @ResponseBody ArrayList<SavingsAccount> getSavingsAccounts(@PathVariable int id) throws NoSuchResorceFoundException {
+	public @ResponseBody List<SavingsAccount> getSavingsAccounts(@PathVariable int id) throws NoSuchResorceFoundException {
 		AccountHolder a = MeritBank.GetAccountHolderById(id);
 		return a.getSavingsAccounts();
 	}
@@ -114,7 +127,7 @@ public class AccountHolderController {
 	
 	@PostMapping(value = "/AccountHolders/{id}/CDAccounts")
 	@ResponseStatus(HttpStatus.CREATED)
-	public @ResponseBody ArrayList<CDAccount> addCDAccountsToId(@RequestBody @Valid CDAccount c , @PathVariable int id) throws NoSuchResorceFoundException {
+	public @ResponseBody List<CDAccount> addCDAccountsToId(@RequestBody @Valid CDAccount c , @PathVariable int id) throws NoSuchResorceFoundException {
 		AccountHolder a = MeritBank.GetAccountHolderById(id);
 		a.addCDAccounts(c); 
 		return a.getCdAccounts();
@@ -122,7 +135,7 @@ public class AccountHolderController {
 	
 			
 	@GetMapping(value = "/AccountHolders/{id}/CDAccounts")
-	public @ResponseBody ArrayList<CDAccount> getCDAccounts(@PathVariable int id) throws NoSuchResorceFoundException {
+	public @ResponseBody List<CDAccount> getCDAccounts(@PathVariable int id) throws NoSuchResorceFoundException {
 		AccountHolder a = MeritBank.GetAccountHolderById(id);
 		return a.getCdAccounts();
 	}
