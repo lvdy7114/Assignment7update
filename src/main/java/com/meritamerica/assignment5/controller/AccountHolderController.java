@@ -91,21 +91,21 @@ public class AccountHolderController {
   	
 	@GetMapping(value = "/AccountHolders/{id}")
 	public @ResponseBody AccountHolder getAccountHolderBytheId(@PathVariable int id) throws NoSuchResorceFoundException {
-		return accountHolderRepository.getOne(id);
+		return accountHolderRepository.findOne(id);  
 		
 	}
   	
 	@PostMapping(value = "/AccountHolders/{id}/CheckingAccounts")
 	@ResponseStatus(HttpStatus.CREATED)
-	public @ResponseBody List<CheckingAccount> addCheckingAccountsToId(@PathVariable int id , @RequestBody @Valid CheckingAccount c) throws NoSuchResorceFoundException, ExceedsCombinedBalanceLimitException{
-		AccountHolder a = accountHolderRepository.getOne(id); 
-		a.addCheckingAccount(c); 
-		return checkingAccountRepository.findAll();
+	public @ResponseBody CheckingAccount addCheckingAccountsToId(@PathVariable int id , @RequestBody @Valid CheckingAccount c) throws NoSuchResorceFoundException, ExceedsCombinedBalanceLimitException{
+		AccountHolder a = accountHolderRepository.findOne(id); 		 
+		a.addCheckingAccount(c);
+		return c;
 	}  
 			
 	@GetMapping(value = "/AccountHolders/{id}/CheckingAccounts")
 	public @ResponseBody List<CheckingAccount> getCheckingAccounts(@PathVariable int id) throws NoSuchResorceFoundException {
-		AccountHolder a = accountHolderRepository.getOne(id);
+		AccountHolder a = accountHolderRepository.findOne(id);
 		return a.getCheckingAccounts();
 	}
 	

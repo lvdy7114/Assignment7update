@@ -59,14 +59,28 @@ public class CDAccount extends BankAccount {
 		this.term = termToBeAdded;
 	}
 	
-	public int getId() {
+	
+	
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+
+	public void setId(Integer id) {
 		this.id = id;
 	}
-	
+
+
+	public AccountHolder getAccountHolder() {
+		return accountHolder;
+	}
+
+
+	public void setAccountHolder(AccountHolder accountHolder) {
+		this.accountHolder = accountHolder;
+	}
+
+
 	public int getTerm() {
 		return term;
 	}	
@@ -125,7 +139,7 @@ public class CDAccount extends BankAccount {
     	 //Should throw a java.lang.NumberFormatException if String cannot be correctly parsed
 
      
-     
+     /*
      @Override 
      public String writeToString() {
  		StringBuilder sb = new StringBuilder(getAccountNumber() + "," + getBalance() + "," + term + "," + getInterestRate() + "," + getOpenedOn());
@@ -139,6 +153,7 @@ public class CDAccount extends BankAccount {
  		String toBeReturned = sb.toString();
  		return toBeReturned;
  	}
+     */
      
 }
 

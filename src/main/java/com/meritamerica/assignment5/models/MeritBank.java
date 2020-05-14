@@ -24,7 +24,7 @@ public class MeritBank {
 	}
 	*/
 	
-	
+	/*
 	public static boolean readFromFile(String fileName) {
 		
 		boolean resoseultes = true;
@@ -122,7 +122,7 @@ public class MeritBank {
 		
 	}
 
-	
+	*/
 	
 	
 	
@@ -236,7 +236,7 @@ public class MeritBank {
 		
 	}
 	
-	
+	/*
 	public static boolean processTransaction(Transaction transaction) throws NegativeAmountException, ExceedsAvailableBalanceException, ExceedsFraudSuspicionLimitException {
 		
 		boolean result = true;
@@ -264,7 +264,7 @@ public class MeritBank {
 		target.addTransaction(transaction);
 		return result;
 	}
-	
+	*/
 	
 	public static FraudQueue getFraudQueue() {
 		return fraudQueue;

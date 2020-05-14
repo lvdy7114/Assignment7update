@@ -25,7 +25,7 @@ public abstract class BankAccount {
 	private long accountNumber;
 	private java.util.Date openedOn;
 	
-	private ArrayList<Transaction> transactionList;
+	//private ArrayList<Transaction> transactionList;
 	
 	
 	public BankAccount() {
@@ -127,7 +127,7 @@ public abstract class BankAccount {
 		return MeritBank.recursiveFutureValue(balance, years, getInterestRate());
 					
 	}
-	
+	/*
 	public String writeToString() {
 		StringBuilder sb = new StringBuilder(accountNumber + "," + balance + "," + getInterestRate() + "," + openedOn + "/n");
 		
@@ -140,7 +140,7 @@ public abstract class BankAccount {
 		String toBeReturned = sb.toString();
 		return toBeReturned;
 	}
-	
+	/*
 	public void addTransaction(Transaction transaction) {
 		getTransactionList().add(transaction);
 		
@@ -160,7 +160,7 @@ public abstract class BankAccount {
 		this.transactionList = transactionList;
 	}
 
-	
+	*/
 	
 	
 	

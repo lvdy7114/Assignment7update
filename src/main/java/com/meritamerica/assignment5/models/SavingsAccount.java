@@ -74,13 +74,20 @@ public class SavingsAccount extends BankAccount {
 		
 	}
 	
-	
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public AccountHolder getAccountHolder() {
+		return accountHolder;
+	}
+
+	public void setAccountHolder(AccountHolder accountHolder) {
+		this.accountHolder = accountHolder;
 	}
 
 	public double getInterestRate() {

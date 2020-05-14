@@ -148,7 +148,7 @@ public class AccountHolder {
 		
 		//adds deposit to transaction list
 		DepositTransaction dt = new DepositTransaction(e , startBalance);
-		e.addTransaction(dt);
+		//e.addTransaction(dt);
 		
 		if(startBalance > FraudQueue.getExcessiveAmount()){
 			MeritBank.addToFraudQueue(dt);
@@ -165,12 +165,12 @@ public class AccountHolder {
 		if(getCombinedBalance() + balance >= ExceedsCombinedBalanceLimitException.getCombinedbalancelimit()){
 			throw new ExceedsCombinedBalanceLimitException();
 		}
-		checkingAccounts.add(ca);
+		checkingAccounts.add(ca); //add(ca);
 		
 		
 		//adds deposit to transaction list
 		DepositTransaction dt = new DepositTransaction(ca , balance);
-		ca.addTransaction(dt);
+		//ca.addTransaction(dt);
 		
 		if(balance > FraudQueue.getExcessiveAmount()){
 			MeritBank.addToFraudQueue(dt);
@@ -190,7 +190,7 @@ public class AccountHolder {
 		
 		//adds deposit to transaction list
 		DepositTransaction dt = new DepositTransaction(e , startBalance);
-		e.addTransaction(dt);
+		//e.addTransaction(dt);
 		
 		if(startBalance > FraudQueue.getExcessiveAmount()){
 			MeritBank.addToFraudQueue(dt);
@@ -210,7 +210,7 @@ public class AccountHolder {
 		
 		//adds deposit to transaction list
 		DepositTransaction dt = new DepositTransaction(sa , balance);
-		sa.addTransaction(dt);
+		//sa.addTransaction(dt);
 		
 		if(balance > FraudQueue.getExcessiveAmount()){
 			MeritBank.addToFraudQueue(dt);
@@ -230,7 +230,7 @@ public class AccountHolder {
 		//adds deposit to transaction list
 		Double balance = e.getBalance();
 		DepositTransaction dt = new DepositTransaction(e , balance);
-		e.addTransaction(dt);
+		//e.addTransaction(dt);
 		
 		if(balance > FraudQueue.getExcessiveAmount()){
 			MeritBank.addToFraudQueue(dt);
@@ -248,7 +248,7 @@ public class AccountHolder {
 		//adds deposit to transaction list
 		Double balance = cda.getBalance();
 		DepositTransaction dt = new DepositTransaction(cda , balance);
-		cda.addTransaction(dt);		
+		//cda.addTransaction(dt);		
 		
 		if(balance > FraudQueue.getExcessiveAmount()){
 			MeritBank.addToFraudQueue(dt);
@@ -378,7 +378,7 @@ public class AccountHolder {
 		return toBeSorted;
 		
 	}*/
-	
+	/*
 	public String writeToString() {
 		StringBuilder holderSB = new StringBuilder(firstName + "," + middleName + "," + lastName + "," + ssn + "\n");
 		
@@ -432,7 +432,7 @@ public class AccountHolder {
 			//Should throw a java.lang.Exception if String cannot be correctly parsed
 
 	
-
+*/
 
     
 	
