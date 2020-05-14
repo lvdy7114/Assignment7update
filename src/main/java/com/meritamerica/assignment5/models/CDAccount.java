@@ -32,13 +32,15 @@ public class CDAccount extends BankAccount {
 	private int term;
 	
 			
-	@DecimalMin(value = "0.0", inclusive = false , message = "interest rate size error too small")
-	@Max(value = (long) 0.9999999999 , message = "interest rate size error too big")
+	//@DecimalMin(value = "0.0", inclusive = false , message = "interest rate size error too small")
+	//@Max(value = (long) 0.9999999999 , message = "interest rate size error too big")
 	private double interestRate;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "account_holder_id")
-	private AccountHolder accountHolder;
+	//@ManyToOne(cascade = CascadeType.ALL)
+	//@JoinColumn(name = "account_holder_id")
+	//private AccountHolder accountHolder;
+	
+	private Integer account_holder_id;
 	
 	public CDAccount() {
 		super();		 
@@ -61,6 +63,16 @@ public class CDAccount extends BankAccount {
 	
 	
 	
+	public Integer getAccount_holder_id() {
+		return account_holder_id;
+	}
+
+
+	public void setAccount_holder_id(Integer account_holder_id) {
+		this.account_holder_id = account_holder_id;
+	}
+
+
 	public Integer getId() {
 		return id;
 	}
@@ -68,16 +80,6 @@ public class CDAccount extends BankAccount {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-
-	public AccountHolder getAccountHolder() {
-		return accountHolder;
-	}
-
-
-	public void setAccountHolder(AccountHolder accountHolder) {
-		this.accountHolder = accountHolder;
 	}
 
 

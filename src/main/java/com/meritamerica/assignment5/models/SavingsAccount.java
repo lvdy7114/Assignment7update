@@ -26,10 +26,10 @@ public class SavingsAccount extends BankAccount {
 	
 	public static final double savingsInterestRate = 0.01;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "account_holder_id")
-	private AccountHolder accountHolder;
-	
+	//@ManyToOne(cascade = CascadeType.ALL)
+	//@JoinColumn(name = "account_holder_id")
+	//private AccountHolder accountHolder;
+	private Integer account_holder_id;
 	
 	public SavingsAccount() {
 		super();
@@ -74,20 +74,23 @@ public class SavingsAccount extends BankAccount {
 		
 	}
 	
+	
+	
+	
+	public Integer getAccount_holder_id() {
+		return account_holder_id;
+	}
+
+	public void setAccount_holder_id(Integer account_holder_id) {
+		this.account_holder_id = account_holder_id;
+	}
+
 	public Integer getId() {
 		return id;
 	}
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public AccountHolder getAccountHolder() {
-		return accountHolder;
-	}
-
-	public void setAccountHolder(AccountHolder accountHolder) {
-		this.accountHolder = accountHolder;
 	}
 
 	public double getInterestRate() {

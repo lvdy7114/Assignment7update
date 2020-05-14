@@ -55,13 +55,13 @@ public class AccountHolder {
 	@OneToOne(cascade = CascadeType.ALL , mappedBy = "accountHolder")
 	AccountHoldersContactDetails contactDetails;	
 	
-	@OneToMany(cascade = CascadeType.ALL , mappedBy = "accountHolder")	
+	@OneToMany(cascade = CascadeType.ALL , mappedBy = "account_holder_id")	
 	private List<CDAccount> cdAccounts;
 	
-	@OneToMany(cascade = CascadeType.ALL , mappedBy = "accountHolder")	
+	@OneToMany(cascade = CascadeType.ALL , mappedBy = "account_holder_id")	
 	private List<SavingsAccount> savingsAccounts;
 	
-	@OneToMany(cascade = CascadeType.ALL , mappedBy = "accountHolder")	
+	@OneToMany(cascade = CascadeType.ALL , mappedBy = "account_holder_id")	
 	private List<CheckingAccount> checkingAccounts;
 	
 
@@ -166,7 +166,7 @@ public class AccountHolder {
 			throw new ExceedsCombinedBalanceLimitException();
 		}
 		checkingAccounts.add(ca); //add(ca);
-		
+		ca.setAccount_holder_id(this.getId());
 		
 		//adds deposit to transaction list
 		DepositTransaction dt = new DepositTransaction(ca , balance);
@@ -207,6 +207,7 @@ public class AccountHolder {
 			throw new ExceedsCombinedBalanceLimitException();
 		}
 		savingsAccounts.add(sa);
+		sa.setAccount_holder_id(this.getId());
 		
 		//adds deposit to transaction list
 		DepositTransaction dt = new DepositTransaction(sa , balance);
@@ -245,6 +246,7 @@ public class AccountHolder {
 	public CDAccount addCDAccount(CDAccount cda) {
 		
 		cdAccounts.add(cda);
+		cda.setAccount_holder_id(this.getId());
 		//adds deposit to transaction list
 		Double balance = cda.getBalance();
 		DepositTransaction dt = new DepositTransaction(cda , balance);

@@ -46,11 +46,14 @@ public class AccountHolderController {
 	@Autowired
 	AccountHoldersContactDetailsRepository accountHoldersContactDetailsRepository;
 	
-	public static CheckingAccountRepository checkingAccountRepository;
+	@Autowired
+	CheckingAccountRepository checkingAccountRepository;
 	
-	public static SavingsAccountRepository savingsAccountRepository;
+	@Autowired
+	SavingsAccountRepository savingsAccountRepository;
 	
-	public static CDAccountRepository cdAccountRepository;
+	@Autowired
+	CDAccountRepository cdAccountRepository;
 	
 	
 	
@@ -100,6 +103,7 @@ public class AccountHolderController {
 	public @ResponseBody CheckingAccount addCheckingAccountsToId(@PathVariable int id , @RequestBody @Valid CheckingAccount c) throws NoSuchResorceFoundException, ExceedsCombinedBalanceLimitException{
 		AccountHolder a = accountHolderRepository.findOne(id); 		 
 		a.addCheckingAccount(c);
+		checkingAccountRepository.save(c);
 		return c;
 	}  
 			
@@ -112,31 +116,35 @@ public class AccountHolderController {
 	
 	@PostMapping(value = "/AccountHolders/{id}/SavingsAccounts")
 	@ResponseStatus(HttpStatus.CREATED)
-	public @ResponseBody List<SavingsAccount> addSavingsAccountsToId(@RequestBody @Valid SavingsAccount c , @PathVariable int id) throws NoSuchResorceFoundException, ExceedsCombinedBalanceLimitException {
+	public @ResponseBody SavingsAccount addSavingsAccountsToId(@RequestBody @Valid SavingsAccount c , @PathVariable int id) throws NoSuchResorceFoundException, ExceedsCombinedBalanceLimitException {
+		AccountHolder a = accountHolderRepository.findOne(id);
+		a.addSavingsAccount(c);
 		savingsAccountRepository.save(c);
-		return savingsAccountRepository.findAll();
+		return c;
 	}
 	
 			
 	@GetMapping(value = "/AccountHolders/{id}/SavingsAccounts")
 	public @ResponseBody List<SavingsAccount> getSavingsAccounts(@PathVariable int id) throws NoSuchResorceFoundException {
-		AccountHolder a = MeritBank.GetAccountHolderById(id);
+		AccountHolder a = accountHolderRepository.findOne(id);
 		return a.getSavingsAccounts();
 	}
 	
 	
+	
 	@PostMapping(value = "/AccountHolders/{id}/CDAccounts")
 	@ResponseStatus(HttpStatus.CREATED)
-	public @ResponseBody List<CDAccount> addCDAccountsToId(@RequestBody @Valid CDAccount c , @PathVariable int id) throws NoSuchResorceFoundException {
-		AccountHolder a = MeritBank.GetAccountHolderById(id);
-		a.addCDAccounts(c); 
-		return a.getCdAccounts();
+	public @ResponseBody CDAccount addCDAccountsToId(@RequestBody @Valid CDAccount c , @PathVariable int id) throws NoSuchResorceFoundException {
+		AccountHolder a = accountHolderRepository.findOne(id);
+		a.addCDAccount(c);
+		cdAccountRepository.save(c);
+		return c;
 	}
 	
 			
 	@GetMapping(value = "/AccountHolders/{id}/CDAccounts")
 	public @ResponseBody List<CDAccount> getCDAccounts(@PathVariable int id) throws NoSuchResorceFoundException {
-		AccountHolder a = MeritBank.GetAccountHolderById(id);
+		AccountHolder a = accountHolderRepository.findOne(id);
 		return a.getCdAccounts();
 	}
 	

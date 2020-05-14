@@ -11,6 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -25,15 +26,16 @@ public class CheckingAccount extends BankAccount {
 	
 	public static final double checkingInterestRate = 0.0001;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "account_holder_id" , referencedColumnName = "id")
-	private AccountHolder accountHolder;
+	//@ManyToOne(cascade = CascadeType.ALL)	
+	//@JoinColumn(name = "account_holder_id" , referencedColumnName = "id")
+	//private AccountHolder accountHolder;
+		
+	private Integer account_holder_id;
 	
 	public CheckingAccount() {
 		super();
 		this.interestRate = checkingInterestRate;
-		this.id = id;
-		
+		 
 	}
 	
 	
@@ -76,13 +78,15 @@ public class CheckingAccount extends BankAccount {
 
 	
 
-	public AccountHolder getAccountHolder() {
-		return accountHolder;
+
+
+	public Integer getAccount_holder_id() {
+		return account_holder_id;
 	}
 
 
-	public void setAccountHolder(AccountHolder accountHolder) {
-		this.accountHolder = accountHolder;
+	public void setAccount_holder_id(Integer account_holder_id) {
+		this.account_holder_id = account_holder_id;
 	}
 
 
