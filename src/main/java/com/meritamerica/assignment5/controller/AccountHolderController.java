@@ -31,13 +31,14 @@ import com.meritamerica.assignment5.models.SavingsAccount;
 import com.meritamerica.assignment5.repositories.AccountHolderRepository;
 import com.meritamerica.assignment5.repositories.AccountHoldersContactDetailsRepository;
 import com.meritamerica.assignment5.repositories.CDAccountRepository;
+import com.meritamerica.assignment5.repositories.CDOfferingRepository;
 import com.meritamerica.assignment5.repositories.CheckingAccountRepository;
 import com.meritamerica.assignment5.repositories.SavingsAccountRepository;
 
 
 
 @RestController
-@RequestMapping("/funnyNameHere")
+@RequestMapping("/request")
 public class AccountHolderController {
 	
 	@Autowired
@@ -55,22 +56,32 @@ public class AccountHolderController {
 	@Autowired
 	CDAccountRepository cdAccountRepository;
 	
+	@Autowired
+	CDOfferingRepository cdofferingRepository;
 	
 	
 	
+	@PostMapping(value="/AccountHolders/{id}/ContactDetails")
+	@ResponseStatus(HttpStatus.CREATED)
+	public AccountHoldersContactDetails postContactDetails( @PathVariable int id ,@RequestBody @Valid AccountHoldersContactDetails contactDetails) {				
+		AccountHolder a = accountHolderRepository.findOne(id);
+		
+		accountHoldersContactDetailsRepository.save(contactDetails);
+		contactDetails.setAccountHolder(a);
+		return contactDetails;	
+  	}
 
-	@GetMapping("/ContactDetails")
-	public List<AccountHoldersContactDetails> getContactDetails() {
-		return accountHoldersContactDetailsRepository.findAll();
-	}
+	@GetMapping("/AccountHolders/{id}/ContactDetails")
+	public @ResponseBody AccountHoldersContactDetails getContactDetails(@PathVariable int id ) {
+		AccountHolder a = accountHolderRepository.findOne(id); 		 
+		 return a.getContactDetails();
+	 }
+	
 	
 	@GetMapping("/AccountHolders")
 	public List<AccountHolder> getAll() {
 		return accountHolderRepository.findAll();
 	}
-	
-	
-	
 	
 	
   	@RequestMapping(value = "/", method = RequestMethod.GET)
@@ -152,15 +163,19 @@ public class AccountHolderController {
 	@PostMapping(value = "/CDOfferings")
 	@ResponseStatus(HttpStatus.CREATED)
 	public CDOffering addCDOffering(@RequestBody @Valid CDOffering c) {
-		MeritBank.addCDOffering(c);
+		cdofferingRepository.save(c);
 		return c;
 	}
 	
 	
 	@GetMapping(value = "/CDOfferings")
-	public ArrayList<CDOffering> getCDOfferings() {
-		return MeritBank.getCDOfferings();
+	public List<CDOffering> getCDOfferings() {
+		
+		return cdofferingRepository.findAll();
 	}
+	
+	
+	
 	/*
 	CDOffering:
 		POST /CDOfferings

@@ -15,18 +15,29 @@ import javax.persistence.Table;
 public class AccountHoldersContactDetails {
 
 	@Id
-	//@Column(name="id")
+	@Column(name="id")
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
 		
 	private String phoneNumber;
 
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "account_holder_id")
+	//@JoinColumn(name = "account_holder_id")
 	private AccountHolder accountHolder;
 	
+	
+	//private Integer account_holder_id;
+
+
+
 	public AccountHoldersContactDetails() {
 		super();
+	}
+	
+	
+	public AccountHoldersContactDetails(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	//	this.accountHolder = accountHolder;
 	}
 
 	public Integer getId() {
@@ -36,7 +47,17 @@ public class AccountHoldersContactDetails {
 	public void setId(Integer id) {
 		this.id = id;
 	}
+/*	
+	public Integer getAccount_holder_id() {
+		return account_holder_id;
+	}
 
+	public void setAccount_holder_id(Integer account_holder_id) {
+		this.account_holder_id = account_holder_id;
+	}
+*/
+	
+	
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
@@ -44,7 +65,27 @@ public class AccountHoldersContactDetails {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
+
 	
+	public AccountHolder getAccountHolder() {
+		return accountHolder;
+	}
+
+
+	public void setAccountHolder(AccountHolder accountHolder) {
+		this.accountHolder = accountHolder;
+	}
+/*
+	public Integer getAccount_holder_id() {
+		return account_holder_id;
+	}
+
+
+	public void setAccount_holder_id(Integer account_holder_id) {
+		this.account_holder_id = account_holder_id;
+	}
+	
+	*/
 	
 
 }
