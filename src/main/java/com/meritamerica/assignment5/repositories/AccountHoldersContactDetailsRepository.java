@@ -10,6 +10,6 @@ import com.meritamerica.assignment5.models.AccountHoldersContactDetails;
 @Repository
 public interface AccountHoldersContactDetailsRepository extends JpaRepository <AccountHoldersContactDetails, Integer>{
 	
-List<AccountHoldersContactDetails> findById(int id);
+//List<AccountHoldersContactDetails> findById(int id);
 
 }

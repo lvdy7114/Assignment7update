@@ -38,9 +38,12 @@ public class CDAccount extends BankAccount {
 	
 	//@ManyToOne(cascade = CascadeType.ALL)
 	//@JoinColumn(name = "account_holder_id")
-	//private AccountHolder accountHolder;
+	private Integer cd_offering_id;
+	
 	
 	private Integer account_holder_id;
+	
+	
 	
 	public CDAccount() {
 		super();		 
@@ -65,6 +68,16 @@ public class CDAccount extends BankAccount {
 	
 	public Integer getAccount_holder_id() {
 		return account_holder_id;
+	}
+
+
+	public Integer getCd_offering_id() {
+		return cd_offering_id;
+	}
+
+
+	public void setCd_offering_id(Integer cd_offering_id) {
+		this.cd_offering_id = cd_offering_id;
 	}
 
 

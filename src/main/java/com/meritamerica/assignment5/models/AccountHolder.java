@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.meritamerica.assignment5.controller.AccountHolderController;
 import com.meritamerica.assignment5.repositories.CDAccountRepository;
 import com.meritamerica.assignment5.repositories.CheckingAccountRepository;
@@ -53,7 +54,9 @@ public class AccountHolder {
 	//private ArrayList<CDAccount> cdAccounts = null;
 	
 	@OneToOne(cascade = CascadeType.ALL , mappedBy = "accountHolder")
-	AccountHoldersContactDetails contactDetails;	
+	//private List <AccountHoldersContactDetails> contactDetails;
+	@JsonIgnore
+	AccountHoldersContactDetails contactDetails;
 	
 	@OneToMany(cascade = CascadeType.ALL , mappedBy = "account_holder_id")	
 	private List<CDAccount> cdAccounts;
@@ -63,6 +66,8 @@ public class AccountHolder {
 	
 	@OneToMany(cascade = CascadeType.ALL , mappedBy = "account_holder_id")	
 	private List<CheckingAccount> checkingAccounts;
+	
+	
 	
 
 	public AccountHolder() {
@@ -74,6 +79,7 @@ public class AccountHolder {
 		checkingAccounts = new ArrayList<CheckingAccount>();
 		savingsAccounts = new ArrayList<SavingsAccount>();
 		cdAccounts = new ArrayList<CDAccount>(); 
+		//this.contactDetails= contactDetails;
 	}
 	
 	//need to adjust this to suit the calls when I find out what they are.
@@ -85,6 +91,8 @@ public class AccountHolder {
 		checkingAccounts = new ArrayList<CheckingAccount>();
 		savingsAccounts = new ArrayList<SavingsAccount>();
 		cdAccounts = new ArrayList<CDAccount>();
+		//this.contactDetails= contactDetails;
+
 	// this.id = ++nextid;
 	}
 	
@@ -138,6 +146,15 @@ public class AccountHolder {
 	public void addCDAccounts(CDAccount cda){
 		cdAccounts.add(cda);		
 	}
+	
+	/*
+	public void addDetails(AccountHoldersContactDetails cd) {
+		contactDetails.a(cd);
+	}	
+		
+	*/	
+	
+	
 	
 	public CheckingAccount addCheckingAccount(double startBalance) throws ExceedsCombinedBalanceLimitException {
 		if(getCombinedBalance() + startBalance >= ExceedsCombinedBalanceLimitException.getCombinedbalancelimit()){
@@ -262,8 +279,8 @@ public class AccountHolder {
 	}
 	
 	
-	
-	
+
+	//Getters and Setters
 	
 		
 	public List<CheckingAccount> getCheckingAccounts() {
@@ -289,9 +306,17 @@ public class AccountHolder {
 	public void setCdAccounts(ArrayList<CDAccount> cdAccounts) {
 		this.cdAccounts = cdAccounts;
 	}
-
 	
 
+
+
+	public AccountHoldersContactDetails getContactDetails() {
+		return contactDetails;
+	}
+
+	public void setContactDetails(AccountHoldersContactDetails contactDetails) {
+		this.contactDetails = contactDetails;
+	}
 
 	public Integer getId() {
 		return id;
