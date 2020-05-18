@@ -20,10 +20,11 @@ public class AccountHoldersContactDetails {
 	private Integer id;
 		
 	private String phoneNumber;
-
-	@OneToOne(cascade = CascadeType.ALL)
-	//@JoinColumn(name = "account_holder_id")
-	private AccountHolder accountHolder;
+	
+	
+	
+	//@OneToOne(cascade = CascadeType.ALL)
+	//private Integer account_holder_id;
 	
 	
 	//private Integer account_holder_id;
@@ -36,7 +37,7 @@ public class AccountHoldersContactDetails {
 	
 	
 	public AccountHoldersContactDetails(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
+		this.phoneNumber = phoneNumber;	
 	//	this.accountHolder = accountHolder;
 	}
 
@@ -66,15 +67,8 @@ public class AccountHoldersContactDetails {
 		this.phoneNumber = phoneNumber;
 	}
 
+
 	
-	public AccountHolder getAccountHolder() {
-		return accountHolder;
-	}
-
-
-	public void setAccountHolder(AccountHolder accountHolder) {
-		this.accountHolder = accountHolder;
-	}
 /*
 	public Integer getAccount_holder_id() {
 		return account_holder_id;

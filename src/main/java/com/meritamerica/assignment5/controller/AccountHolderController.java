@@ -38,7 +38,7 @@ import com.meritamerica.assignment5.repositories.SavingsAccountRepository;
 
 
 @RestController
-@RequestMapping("/request")
+@RequestMapping("/funnyNameHere")
 public class AccountHolderController {
 	
 	@Autowired
@@ -65,16 +65,17 @@ public class AccountHolderController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public AccountHoldersContactDetails postContactDetails( @PathVariable int id ,@RequestBody @Valid AccountHoldersContactDetails contactDetails) {				
 		AccountHolder a = accountHolderRepository.findOne(id);
-		
+		a.setAccountHoldersContactDetails(contactDetails);
 		accountHoldersContactDetailsRepository.save(contactDetails);
-		contactDetails.setAccountHolder(a);
+		
 		return contactDetails;	
   	}
 
 	@GetMapping("/AccountHolders/{id}/ContactDetails")
 	public @ResponseBody AccountHoldersContactDetails getContactDetails(@PathVariable int id ) {
-		AccountHolder a = accountHolderRepository.findOne(id); 		 
-		 return a.getContactDetails();
+		AccountHolder a = accountHolderRepository.findOne(id);
+		AccountHoldersContactDetails deets = a.getAccountHoldersContactDetails();
+		 return deets;
 	 }
 	
 	

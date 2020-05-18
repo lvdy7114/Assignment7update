@@ -53,10 +53,14 @@ public class AccountHolder {
 	//private ArrayList<SavingsAccount> savingsAccounts = null;
 	//private ArrayList<CDAccount> cdAccounts = null;
 	
-	@OneToOne(cascade = CascadeType.ALL , mappedBy = "accountHolder")
+	//@OneToOne(cascade = CascadeType.ALL , mappedBy = "account_holder_id")
 	//private List <AccountHoldersContactDetails> contactDetails;
-	@JsonIgnore
-	AccountHoldersContactDetails contactDetails;
+	//AccountHoldersContactDetails contactDetails;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "contact_Info_id" , referencedColumnName = "id")
+	private AccountHoldersContactDetails accountHoldersContactDetails;
+	
 	
 	@OneToMany(cascade = CascadeType.ALL , mappedBy = "account_holder_id")	
 	private List<CDAccount> cdAccounts;
@@ -78,7 +82,8 @@ public class AccountHolder {
 		this.ssn = "";
 		checkingAccounts = new ArrayList<CheckingAccount>();
 		savingsAccounts = new ArrayList<SavingsAccount>();
-		cdAccounts = new ArrayList<CDAccount>(); 
+		cdAccounts = new ArrayList<CDAccount>();
+		//contactDetails = new AccountHoldersContactDetails();
 		//this.contactDetails= contactDetails;
 	}
 	
@@ -91,6 +96,7 @@ public class AccountHolder {
 		checkingAccounts = new ArrayList<CheckingAccount>();
 		savingsAccounts = new ArrayList<SavingsAccount>();
 		cdAccounts = new ArrayList<CDAccount>();
+		//contactDetails = new AccountHoldersContactDetails();
 		//this.contactDetails= contactDetails;
 
 	// this.id = ++nextid;
@@ -282,9 +288,20 @@ public class AccountHolder {
 
 	//Getters and Setters
 	
+	
 		
 	public List<CheckingAccount> getCheckingAccounts() {
 		return checkingAccounts;
+	}
+
+	
+
+	public AccountHoldersContactDetails getAccountHoldersContactDetails() {
+		return accountHoldersContactDetails;
+	}
+
+	public void setAccountHoldersContactDetails(AccountHoldersContactDetails accountHoldersContactDetails) {
+		this.accountHoldersContactDetails = accountHoldersContactDetails;
 	}
 
 	public void setCheckingAccounts(ArrayList<CheckingAccount> checkingAccounts) {
@@ -305,17 +322,6 @@ public class AccountHolder {
 
 	public void setCdAccounts(ArrayList<CDAccount> cdAccounts) {
 		this.cdAccounts = cdAccounts;
-	}
-	
-
-
-
-	public AccountHoldersContactDetails getContactDetails() {
-		return contactDetails;
-	}
-
-	public void setContactDetails(AccountHoldersContactDetails contactDetails) {
-		this.contactDetails = contactDetails;
 	}
 
 	public Integer getId() {
@@ -351,18 +357,15 @@ public class AccountHolder {
 	public String getLastName() {
 		return lastName;
 	}
-	
-	
-	public void setSSN(String ssn) {
+			
+	public String getSsn() {
+		return ssn;
+	}
+
+	public void setSsn(String ssn) {
 		this.ssn = ssn;
 	}
 
-	public String getSSN(){
-		return ssn;
-	}
-	
-
-	
 	public int getNumberOfCheckingAccounts() {
 		if(checkingAccounts != null) {
 			return checkingAccounts.size();
