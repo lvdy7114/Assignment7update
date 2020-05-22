@@ -21,8 +21,8 @@ public class AccountHoldersContactDetails {
 		
 	private String phoneNumber;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	//@JoinColumn(name = "account_holder_id")
+	@OneToOne
+    @JoinColumn(name = "account_holder_id", nullable = true)
 	private AccountHolder accountHolder;
 	
 	

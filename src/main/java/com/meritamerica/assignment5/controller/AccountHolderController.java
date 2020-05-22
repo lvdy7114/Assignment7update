@@ -35,8 +35,6 @@ import com.meritamerica.assignment5.repositories.CDOfferingRepository;
 import com.meritamerica.assignment5.repositories.CheckingAccountRepository;
 import com.meritamerica.assignment5.repositories.SavingsAccountRepository;
 
-
-
 @RestController
 @RequestMapping("/request")
 public class AccountHolderController {
@@ -60,6 +58,11 @@ public class AccountHolderController {
 	CDOfferingRepository cdofferingRepository;
 	
 	
+	@RequestMapping(value = "/hello")
+	public String test() {
+		//System.out.println("Hello!");
+		return "hello world";
+	}
 	
 	@PostMapping(value="/AccountHolders/{id}/ContactDetails")
 	@ResponseStatus(HttpStatus.CREATED)
@@ -84,10 +87,7 @@ public class AccountHolderController {
 	}
 	
 	
-  	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String test() {
-		return "hello world";
-	}
+  
   	
   	/*
   	@GetMapping(value = "/AccountHolders")
