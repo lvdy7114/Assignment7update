@@ -1,6 +1,7 @@
 package com.meritamerica.assignment5.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -9,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.meritamerica.assignment5.models.AuthenticationRequest;
@@ -27,7 +29,10 @@ public class AuthenticationController {
 	@Autowired
 	private JwtUtil jwtTokenUtil;
 	
+	
+	//Anyone can call this
 	@RequestMapping(value= "/authenticate", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
 		try {
 		authenticationManager.authenticate(
@@ -47,7 +52,7 @@ public class AuthenticationController {
 	
 	}
 
-
+	
 
 
 

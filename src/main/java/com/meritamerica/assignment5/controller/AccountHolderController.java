@@ -36,7 +36,7 @@ import com.meritamerica.assignment5.repositories.CheckingAccountRepository;
 import com.meritamerica.assignment5.repositories.SavingsAccountRepository;
 
 @RestController
-@RequestMapping("/funnyNameHere")
+@RequestMapping("/request")
 public class AccountHolderController {
 	
 	@Autowired

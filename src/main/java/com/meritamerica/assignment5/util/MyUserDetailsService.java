@@ -15,7 +15,8 @@ public class MyUserDetailsService implements UserDetailsService {
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 		// TODO Auto-generated method stub
 	//	new User("Meryem", "Meryem", new ArrayList<>());
-		return new User("Meryem", "Meryem", new ArrayList<>());
+		//Change this to real DB info(sa, password for h2)
+		return new User("sa", "password", new ArrayList<>());
 	}
 
 	

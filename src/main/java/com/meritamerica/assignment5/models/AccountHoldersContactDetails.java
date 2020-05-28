@@ -20,18 +20,18 @@ public class AccountHoldersContactDetails {
 	private Integer id;
 		
 	private String phoneNumber;
-<<<<<<< HEAD
+//<<<<<<< HEAD
 
 	@OneToOne
     @JoinColumn(name = "account_holder_id", nullable = true)
 	private AccountHolder accountHolder;
-=======
+//=======
 	
 	
 	
 	//@OneToOne(cascade = CascadeType.ALL)
 	//private Integer account_holder_id;
->>>>>>> f8e201cb18417aa23f94cc78132cbc7e9c0e5b14
+//>>>>>>> f8e201cb18417aa23f94cc78132cbc7e9c0e5b14
 	
 	
 	//private Integer account_holder_id;
