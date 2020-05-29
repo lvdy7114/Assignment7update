@@ -79,11 +79,7 @@
 		    <artifactId>javafx-controls</artifactId>
 		    <version>14</version>
 		</dependency>
-		<dependency>
-		    <groupId>io.jsonwebtoken</groupId>
-		    <artifactId>jjwt</artifactId>
-		    <version>0.2</version>
-		</dependency>
+		
     </dependencies>
 
     <build>

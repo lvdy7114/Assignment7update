@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.meritamerica.assignment5.models.AuthenticationRequest;
 import com.meritamerica.assignment5.models.AuthenticationResponse;
 
-@RestController
 //@RequestMapping("/authenticate")
+@RestController
 public class AuthenticationController {
 	
 	@Autowired
