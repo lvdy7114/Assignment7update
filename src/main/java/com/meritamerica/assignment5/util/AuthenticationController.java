@@ -17,8 +17,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.meritamerica.assignment5.models.AuthenticationRequest;
 import com.meritamerica.assignment5.models.AuthenticationResponse;
 
+<<<<<<< HEAD
 @RestController
 @RequestMapping("/authenticate")
+=======
+//@RequestMapping("/authenticate")
+@RestController
+>>>>>>> 7ab9cc7667690d1d5d1f6e90e5e5d7d968e6978e
 public class AuthenticationController {
 	
 	@Autowired
