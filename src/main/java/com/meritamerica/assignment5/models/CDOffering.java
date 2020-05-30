@@ -16,8 +16,8 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 
-
 @Entity
+@Table(name ="cdOffering", catalog = "meritbank")
 public class CDOffering {
 	
 	

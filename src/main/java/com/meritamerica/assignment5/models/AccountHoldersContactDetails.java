@@ -11,7 +11,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
-//@Table(name="ContactDetails", catalog = "meritBank")
+@Table(name="ContactDetails", catalog = "meritBank")
 public class AccountHoldersContactDetails {
 
 	@Id

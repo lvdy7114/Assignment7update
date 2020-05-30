@@ -15,6 +15,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
+@Table(name ="checkingAccount", catalog = "meritbank")
 public class CheckingAccount extends BankAccount {
 
 	@Id
