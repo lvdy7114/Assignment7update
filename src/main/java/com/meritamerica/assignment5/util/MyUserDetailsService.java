@@ -20,10 +20,11 @@ public class MyUserDetailsService implements UserDetailsService {
 	
 	
 	@Override
-	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-		
-		User user = userRepository.FindByUserName(userName);		
-			return new MyUserDetails(user);
+	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {	
+		//userRepository.FindByUserName(userName);
+		Optional<User> user = userRepository.FindByUserName(userName);		
+			
+			return user.map(MyUserDetails::new).get();
 	}
 
 	

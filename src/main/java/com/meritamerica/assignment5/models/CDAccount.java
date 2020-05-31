@@ -20,6 +20,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 
 @Entity
+@Table(name ="cdAccount", catalog = "meritbank")
 public class CDAccount extends BankAccount {
 		
 	

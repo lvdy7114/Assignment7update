@@ -27,6 +27,7 @@ import com.meritamerica.assignment5.repositories.SavingsAccountRepository;
 
 
 @Entity
+@Table(name ="accountholders", catalog = "meritbank")
 public class AccountHolder {
 	
 	//public static int nextid = 0;
