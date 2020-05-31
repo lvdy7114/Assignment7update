@@ -33,12 +33,14 @@ public class AuthenticationController {
 	
 	@Autowired
 	private JwtUtil jwtTokenUtil;
-	
+
 	@Autowired
 	private UsersRepository usersRepository;
-	
-	//@PostMapping(value = "/authenticate")
-	//Anyone can call this
+
+
+	//@PostMapping("/authenticate/createUser")
+	//Public @ResposeBody User CreatesaUser()
+
 	
 	@RequestMapping(value= "/authenticate", method = RequestMethod.POST)
 	@ResponseStatus(HttpStatus.CREATED)

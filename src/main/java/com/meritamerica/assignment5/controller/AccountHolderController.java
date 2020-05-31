@@ -4,6 +4,7 @@ package com.meritamerica.assignment5.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import javax.validation.Valid;
 
@@ -30,6 +31,7 @@ import com.meritamerica.assignment5.models.CheckingAccount;
 import com.meritamerica.assignment5.models.ExceedsCombinedBalanceLimitException;
 import com.meritamerica.assignment5.models.MeritBank;
 import com.meritamerica.assignment5.models.SavingsAccount;
+import com.meritamerica.assignment5.models.Users;
 import com.meritamerica.assignment5.repositories.AccountHolderRepository;
 import com.meritamerica.assignment5.repositories.AccountHoldersContactDetailsRepository;
 import com.meritamerica.assignment5.repositories.CDAccountRepository;
@@ -182,14 +184,28 @@ public class AccountHolderController {
 		
 		return cdofferingRepository.findAll();
 	}
+
 	
-/*	
+
 	//Assignment 7 starts here
+	
+	
+
 	@GetMapping("/Me")
 	public @ResponseBody AccountHolder getAccountHolderById(@RequestHeader String jwttoken) {
 		//String authorizationHeader = request.getHeader("Authorization");
+
+	
+
+
+		String jwt = 	jwttoken.substring(7); 
+		String username = jwtUtil.extractUsername(jwt); 
+		Users ua = usersRepository.findByUsername(username); 
+		return ua.getAccountHolder();	
+		//AccountHolder ah = accountHolderRepository.findById((long)aid);
 	}
-*/	
+	
+	
 
 	
 	

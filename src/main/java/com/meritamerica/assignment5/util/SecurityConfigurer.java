@@ -39,16 +39,17 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 		http.csrf().disable().authorizeRequests()
 		.antMatchers("/authenticate").permitAll()
 		.anyRequest().authenticated()
-		
+
+		//here after its all authenticated(Jwt needed)
+		.antMatchers("/authenticate/CreateUser").hasAuthority("ADMIN")
 		.antMatchers("/AccountHolders/**").hasAuthority("ADMIN")
 		.antMatchers("/Me/**").hasAuthority("ACCOUNTHOLDER")
-		.antMatchers(HttpMethod.POST,"/CDOffering").hasAuthority("ADMIN")
-		.antMatchers(HttpMethod.GET,"/CDOffering").hasAnyAuthority("ADMIN","ACCOUNTHOLDER")
-		.antMatchers("/authenticate/CreateUser").hasAuthority("ADMIN")
-		
-		.and().exceptionHandling().and().sessionManagement()
-		.sessionCreationPolicy(SessionCreationPolicy.STATELESS);//Spring Security wont create a session
-http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+		.antMatchers(HttpMethod.POST, "/CDOfferings").hasAuthority("ADMIN" )
+		.antMatchers(HttpMethod.GET,"/CDOfferings").hasAnyAuthority("ADMIN","ACCOUNTHOLDER")		
+		.and().sessionManagement()
+		.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
 	}
 	
 	
