@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -24,12 +25,32 @@ public class MyUserDetailsService implements UserDetailsService {
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {	
 		
-		Optional<Users> users = usersRepository.findByUsername(userName);        
+		//Optional<Users> users = usersRepository.findByUsername(userName);        
         
-        return users.map(MyUserDetails::new).get();
+        //return users.map(MyUserDetails::new).get();
+		//return new User ("admin", "admin" , new ArrayList<>());
+		
+		Users users = usersRepository.findByUsername(userName);
+		if(users!= null) {
+			return new User(userName, users.getPassword(), new ArrayList<>());
+		}
+			return new User("admin", "admin" , new ArrayList<>());
+				
+		}
+		
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	}
+	
 
 	
 	
 	
-}
+

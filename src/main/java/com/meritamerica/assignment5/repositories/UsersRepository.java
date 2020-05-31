@@ -11,5 +11,5 @@ import com.meritamerica.assignment5.models.Users;
 public interface UsersRepository extends JpaRepository <Users, Integer> {
 
 	//org.springframework.security.core.userdetails.User findByName(String username);
-		Optional<Users>  findByUsername(String username);
+		Users  findByUsername(String username);
 }

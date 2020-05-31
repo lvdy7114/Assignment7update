@@ -2,6 +2,7 @@ package com.meritamerica.assignment5.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -35,14 +36,19 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 //	antMatchers("/h2-console/**").permitAll().
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable()
-		.authorizeRequests()		
+		http.csrf().disable().authorizeRequests()
 		.antMatchers("/authenticate").permitAll()
 		.anyRequest().authenticated()
 		
-		.and().sessionManagement()
-		.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+		.antMatchers("/AccountHolders/**").hasAuthority("ADMIN")
+		.antMatchers("/Me/**").hasAuthority("ACCOUNTHOLDER")
+		.antMatchers(HttpMethod.POST,"/CDOffering").hasAuthority("ADMIN")
+		.antMatchers(HttpMethod.GET,"/CDOffering").hasAnyAuthority("ADMIN","ACCOUNTHOLDER")
+		.antMatchers("/authenticate/CreateUser").hasAuthority("ADMIN")
+		
+		.and().exceptionHandling().and().sessionManagement()
+		.sessionCreationPolicy(SessionCreationPolicy.STATELESS);//Spring Security wont create a session
+http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 	
 	

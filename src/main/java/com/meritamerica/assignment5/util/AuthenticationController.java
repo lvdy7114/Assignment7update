@@ -16,11 +16,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.meritamerica.assignment5.models.AuthenticationRequest;
 import com.meritamerica.assignment5.models.AuthenticationResponse;
+import com.meritamerica.assignment5.models.Users;
+import com.meritamerica.assignment5.repositories.UsersRepository;
 
 
 
 @RestController
-@RequestMapping("/authenticate")
+//@RequestMapping("/authenticate")
 public class AuthenticationController {
 	
 	@Autowired
@@ -31,6 +33,9 @@ public class AuthenticationController {
 	
 	@Autowired
 	private JwtUtil jwtTokenUtil;
+	
+	@Autowired
+	private UsersRepository usersRepository;
 	
 	//@PostMapping(value = "/authenticate")
 	//Anyone can call this
@@ -56,7 +61,11 @@ public class AuthenticationController {
 	
 	}
 
-	
+	@PostMapping(value = "/authenticate/CreateUser")
+	public ResponseEntity<?> createUser(@RequestBody Users users){
+		usersRepository.save(users);
+		return ResponseEntity.ok(users);
+	}
 
 
 

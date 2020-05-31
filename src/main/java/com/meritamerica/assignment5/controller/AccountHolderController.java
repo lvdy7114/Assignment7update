@@ -41,7 +41,7 @@ import com.meritamerica.assignment5.util.JwtUtil;
 import com.meritamerica.assignment5.util.MyUserDetailsService;
 
 @RestController
-@RequestMapping("/request")
+//@RequestMapping("/request")
 public class AccountHolderController {
 	
 	@Autowired
@@ -183,14 +183,14 @@ public class AccountHolderController {
 		return cdofferingRepository.findAll();
 	}
 	
-	/*
+/*	
 	//Assignment 7 starts here
 	@GetMapping("/Me")
 	public @ResponseBody AccountHolder getAccountHolderById(@RequestHeader String jwttoken) {
-		String authorizationHeader = request.getHeader("Authorization");
+		//String authorizationHeader = request.getHeader("Authorization");
 	}
-	
-	*/
+*/	
+
 	
 	
 	
