@@ -2,6 +2,7 @@ package com.meritamerica.assignment5.util;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -39,7 +40,12 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 		.authorizeRequests()		
 		.antMatchers("/authenticate").permitAll()
 		.anyRequest().authenticated()
-		
+		//here after its all authenticated(Jwt needed)
+		.antMatchers("/authenticate/CreateUser").hasAuthority("ADMIN")
+		.antMatchers("/AccountHolders/**").hasAuthority("ADMIN")
+		.antMatchers("/Me/**").hasAuthority("ACCOUNTHOLDER")
+		.antMatchers(HttpMethod.POST, "/CDOfferings").hasAuthority("ADMIN" )
+		.antMatchers(HttpMethod.GET,"/CDOfferings").hasAnyAuthority("ADMIN","ACCOUNTHOLDER")		
 		.and().sessionManagement()
 		.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

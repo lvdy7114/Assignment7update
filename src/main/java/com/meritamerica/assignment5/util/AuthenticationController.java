@@ -20,7 +20,7 @@ import com.meritamerica.assignment5.models.AuthenticationResponse;
 
 
 @RestController
-@RequestMapping("/authenticate")
+//@RequestMapping("/authenticate")
 public class AuthenticationController {
 	
 	@Autowired
@@ -31,6 +31,11 @@ public class AuthenticationController {
 	
 	@Autowired
 	private JwtUtil jwtTokenUtil;
+	
+
+	//@PostMapping("/authenticate/createUser")
+	//Public @ResposeBody User CreatesaUser()
+	
 	
 	//@PostMapping(value = "/authenticate")
 	//Anyone can call this
