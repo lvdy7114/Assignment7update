@@ -38,7 +38,7 @@ public class AccountHolder {
 	private Integer id;
 	
 	@NotBlank(message = "firtName is missing")
-	@Column(name="firstName")
+	//@Column(name="firstName")
 	private String firstName;
 		
 	private String middleName;
@@ -49,14 +49,7 @@ public class AccountHolder {
 	@NotBlank(message = "ssn is missing")
 	private String ssn;
 	
-	//private BankAccount[] bankAccounts;
-	//private ArrayList<CheckingAccount> checkingAccounts = null;
-	//private ArrayList<SavingsAccount> savingsAccounts = null;
-	//private ArrayList<CDAccount> cdAccounts = null;
-	
-	//@OneToOne(cascade = CascadeType.ALL , mappedBy = "account_holder_id")
-	//private List <AccountHoldersContactDetails> contactDetails;
-	//AccountHoldersContactDetails contactDetails;
+
 	
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "contact_Info_id" , referencedColumnName = "id")
@@ -71,6 +64,22 @@ public class AccountHolder {
 	
 	@OneToMany(cascade = CascadeType.ALL , mappedBy = "account_holder_id")	
 	private List<CheckingAccount> checkingAccounts;
+	
+	
+	
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name ="user_id")
+	private Users users;
+	
+
+	public Users getUsers() {
+		return users;
+	}
+
+	public void setUser(Users users) {
+		this.users = users;
+	}
 	
 	
 	
@@ -392,78 +401,7 @@ public class AccountHolder {
 		}
 	}	
 	
-	/*
-	public static AccountHolder[] sortAccounts(AccountHolder[] toBeSorted) {
-		AccountHolder tempAH; 
-		
-		for(int i = 0 ; i < toBeSorted.length ; i++) {
-			for(int j = i + 1 ; j < toBeSorted.length ; j++) {
-				if(toBeSorted[i].getCombinedBalance() > toBeSorted[j].getCombinedBalance()) {
-					tempAH = toBeSorted[i];
-					toBeSorted[i] = toBeSorted[j];
-					toBeSorted[j] = tempAH;
-					
-				}
-			}
-		}
-		return toBeSorted;
-		
-	}*/
-	/*
-	public String writeToString() {
-		StringBuilder holderSB = new StringBuilder(firstName + "," + middleName + "," + lastName + "," + ssn + "\n");
-		
-		int counterCA = getNumberOfCheckingAccounts();
-		int counterSA = getNumberOfSavingsAccounts();
-		int counterCDA = getNumberOfCDAccounts();
 	
-		holderSB.append(counterCA + "\n");		
-		
-		for(CheckingAccount ba : checkingAccounts) {
-			holderSB.append(ba.writeToString() + "\n");								
-		}
-		
-		holderSB.append(counterSA + "\n");
-		
-        for(SavingsAccount ba : savingsAccounts) {
-				holderSB.append(ba.writeToString() + "\n");			
-        }
-        
-        holderSB.append(counterCDA + "\n");
-		
-        for(CDAccount ba : cdAccounts) {
-				holderSB.append(ba.writeToString() + "\n");				
-        }
-                	
-		String toBeReturned = holderSB.toString();
-		return toBeReturned;
-	}
-	
-	static AccountHolder readFromString(String accountHolderData) {
-		AccountHolder toBeAdded = null;
-		try{
-			
-			String[] toBeParsed = accountHolderData.split(",");
-			String firstNameToBeAdded = toBeParsed[0];
-			String middleNameToBeAdded = toBeParsed[1];
-			String lastNameToBeAdded = toBeParsed[2];
-			String ssnToBeAdded = toBeParsed[3];
-			
-			toBeAdded = new AccountHolder(firstNameToBeAdded , middleNameToBeAdded , lastNameToBeAdded , ssnToBeAdded);
-			
-		}catch(java.lang.Exception exception){
-			
-		}
-		return toBeAdded;
-		
-	}
-	
-			
-			//throws Exception	
-			//Should throw a java.lang.Exception if String cannot be correctly parsed
-
-	
-*/
 
     
 	

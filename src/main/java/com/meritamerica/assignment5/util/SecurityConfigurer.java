@@ -20,6 +20,7 @@ import com.meritamerica.assignment5.util.*;
 @EnableWebSecurity
 public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
+	//Configure the endpoints authentication
 		
 	@Autowired
 	private MyUserDetailsService myUserDetailsService;
@@ -37,15 +38,16 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 		http.csrf().disable().authorizeRequests()
-		.antMatchers("/authenticate").permitAll()
-		.anyRequest().authenticated()
+	
 
 		//here after its all authenticated(Jwt needed)
 		.antMatchers("/authenticate/CreateUser").hasAuthority("ADMIN")
 		.antMatchers("/AccountHolders/**").hasAuthority("ADMIN")
 		.antMatchers("/Me/**").hasAuthority("ACCOUNTHOLDER")
 		.antMatchers(HttpMethod.POST, "/CDOfferings").hasAuthority("ADMIN" )
-		.antMatchers(HttpMethod.GET,"/CDOfferings").hasAnyAuthority("ADMIN","ACCOUNTHOLDER")		
+		.antMatchers(HttpMethod.GET,"/CDOfferings").hasAnyAuthority("ADMIN","ACCOUNTHOLDER")	
+		.antMatchers("/authenticate").permitAll()
+		.anyRequest().authenticated()
 		.and().sessionManagement()
 		.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 		http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);

@@ -14,7 +14,7 @@ import com.meritamerica.assignment5.models.AccountHolder;
 @Repository
 public interface AccountHolderRepository extends JpaRepository <AccountHolder, Integer>{
 		
-	//List<AccountHolder> findByName(String name);
+	AccountHolder findById(Integer id);
 
 }
 

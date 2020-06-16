@@ -12,6 +12,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.meritamerica.assignment5.models.Users;
 
 public class MyUserDetails implements UserDetails{
+	/*
+	 * is container for core user information
+	 * non-security related user information
+	 */
 	
 	
 

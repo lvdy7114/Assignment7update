@@ -10,7 +10,11 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,11 +29,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.meritamerica.assignment5.Exceptions.NoSuchResorceFoundException;
 import com.meritamerica.assignment5.models.AccountHolder;
 import com.meritamerica.assignment5.models.AccountHoldersContactDetails;
+import com.meritamerica.assignment5.models.AuthenticationRequest;
+import com.meritamerica.assignment5.models.AuthenticationResponse;
 import com.meritamerica.assignment5.models.CDAccount;
 import com.meritamerica.assignment5.models.CDOffering;
 import com.meritamerica.assignment5.models.CheckingAccount;
 import com.meritamerica.assignment5.models.ExceedsCombinedBalanceLimitException;
 import com.meritamerica.assignment5.models.MeritBank;
+import com.meritamerica.assignment5.models.NegativeAmountException;
 import com.meritamerica.assignment5.models.SavingsAccount;
 import com.meritamerica.assignment5.models.Users;
 import com.meritamerica.assignment5.repositories.AccountHolderRepository;
@@ -42,8 +49,8 @@ import com.meritamerica.assignment5.repositories.UsersRepository;
 import com.meritamerica.assignment5.util.JwtUtil;
 import com.meritamerica.assignment5.util.MyUserDetailsService;
 
-@RestController
 //@RequestMapping("/request")
+@RestController
 public class AccountHolderController {
 	
 	@Autowired
@@ -74,7 +81,7 @@ public class AccountHolderController {
 	 private MyUserDetailsService userDetailsService;
 	 
 	 @Autowired
-	 private JwtUtil jwtUtil;
+	 private JwtUtil jwtTokenUtil;
 	 
 	 
 	@RequestMapping(value = "/hello")
@@ -85,9 +92,15 @@ public class AccountHolderController {
 	
 	@PostMapping(value = "/AccountHolders")
   	@ResponseStatus(HttpStatus.CREATED)
-	public AccountHolder postAccounHolder(@RequestBody @Valid AccountHolder a) {				
-  		accountHolderRepository.save(a);
+	public AccountHolder postAccounHolder(@RequestBody @Valid AccountHolder accountHolder) {				
+  		/*accountHolderRepository.save(a);
   			return a;	
+  		*/
+  			Users users = usersRepository.getOne((int) accountHolder.getUsers().getId().longValue());
+  			users.setAccountHolder(accountHolder);
+  			accountHolder.setUser(users);;
+  			accountHolderRepository.save(accountHolder);
+  			return accountHolder; 
   	}
 	
 	@GetMapping("/AccountHolders")
@@ -190,23 +203,96 @@ public class AccountHolderController {
 	//Assignment 7 starts here
 	
 	
-
-	@GetMapping("/Me")
-	public @ResponseBody AccountHolder getAccountHolderById(@RequestHeader String jwttoken) {
-		//String authorizationHeader = request.getHeader("Authorization");
-
+	@RequestMapping(value= "/authenticate", method = RequestMethod.POST)
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest) throws Exception {
+		System.out.println("in create authentication token");
+		try {
+		authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(authenticationRequest.getUserName(), authenticationRequest.getPassword())
+				);
+		}catch (BadCredentialsException e) {
+			throw new Exception("Incorrect username or password", e);
+		}
 	
+	final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUserName());
+	
+	final String jwt = jwtTokenUtil.generateToken(userDetails);
+			//generateToken(userDetails);
+	
+	return ResponseEntity.ok(new AuthenticationResponse(jwt));
+	
+	
+	}
 
-
-		String jwt = 	jwttoken.substring(7); 
-		String username = jwtUtil.extractUsername(jwt); 
-		Users ua = usersRepository.findByUsername(username); 
-		return ua.getAccountHolder();	
-		//AccountHolder ah = accountHolderRepository.findById((long)aid);
+	@PostMapping(value = "/authenticate/CreateUser")
+	@ResponseStatus(HttpStatus.CREATED)
+	public ResponseEntity<?> createUser(@RequestBody Users users){
+		usersRepository.save(users);
+		return ResponseEntity.ok(users);
 	}
 	
-	
+	@GetMapping(value= "/Me")
+	public AccountHolder getMe(@RequestHeader (name="Authorization") String token) {
+		token = token.substring(7);
+		Users users = usersRepository.findByUsername(jwtTokenUtil.extractUsername(token)).get();
+		Integer i = users.getAccountHolder().getId();
+		return accountHolderRepository.findById(i.intValue());
 
+	}
+	
+	@PostMapping(value = "/Me/CheckingAccounts")
+	public CheckingAccount addMeChecking(@RequestHeader (name = "Authorization")String token, @RequestBody CheckingAccount checking) throws ExceedsCombinedBalanceLimitException, 
+										NegativeAmountException {
+		token = token.substring(7);
+		Users users = usersRepository.findByUsername(jwtTokenUtil.extractUsername(token)).get();
+		AccountHolder account = accountHolderRepository.findById(users.getAccountHolder().getId()); 
+		account.addCheckingAccount(checking);
+		checkingAccountRepository.save(checking); 
+		return checking; 
+	}
+	
+	@GetMapping(value = "/Me/CheckingAccounts")
+	public List<CheckingAccount> getMeChecking(@RequestHeader (name = "Authorization")String token) {
+		token = token.substring(7);
+		Users users = usersRepository.findByUsername(jwtTokenUtil.extractUsername(token)).get();
+		return accountHolderRepository.findById(users.getAccountHolder().getId().intValue()).getCheckingAccounts();
+	}
+	
+	@PostMapping(value = "/Me/SavingsAccount")
+	public SavingsAccount addMeSavings(@RequestHeader (name = "Authorization")String token, @RequestBody SavingsAccount savings)
+								throws ExceedsCombinedBalanceLimitException, NegativeAmountException {
+		token = token.substring(7);
+		Users users = usersRepository.findByUsername(jwtTokenUtil.extractUsername(token)).get();
+		AccountHolder account = accountHolderRepository.findById(users.getAccountHolder().getId());
+		account.addSavingsAccount(savings);
+		accountHolderRepository.save(account);
+		return savings;
+	}
+
+	@GetMapping(value = "/Me/SavingsAccount")
+	public List<SavingsAccount> getMeSavings(@RequestHeader (name = "Authorization")String token) {
+		token = token.substring(7);
+		Users users = usersRepository.findByUsername(jwtTokenUtil.extractUsername(token)).get();
+		return accountHolderRepository.findById(users.getAccountHolder().getId().intValue()).getSavingsAccounts();
+	}
+	
+	@PostMapping(value = "/Me/CDAccount")
+	public CDAccount addMeCDAccount(@RequestHeader (name = "Authorization")String token, @RequestBody CDAccount cdAccount) throws ExceedsCombinedBalanceLimitException, NegativeAmountException {
+		token = token.substring(7);
+		Users users = usersRepository.findByUsername(jwtTokenUtil.extractUsername(token)).get();
+		AccountHolder account = accountHolderRepository.findById(users.getAccountHolder().getId());
+		account.addCDAccount(cdAccount);
+		accountHolderRepository.save(account);
+		return cdAccount;
+	}
+	
+	@GetMapping(value = "/Me/CDAccount")
+	public List<CDAccount> getMeCDAccount(@RequestHeader (name = "Authorization")String token) {
+		token = token.substring(7);
+		Users users = usersRepository.findByUsername(jwtTokenUtil.extractUsername(token)).get();
+		return accountHolderRepository.findById(users.getAccountHolder().getId().intValue()).getCdAccounts();
+	}
 	
 	
 	

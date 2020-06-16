@@ -2,8 +2,10 @@ package com.meritamerica.assignment5.models;
 
 import java.util.Collection;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,11 +14,19 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.OneToOne;
 
 @Entity
-@Table(name ="Users", catalog = "meritbank")
-public class Users {
+@Table(name ="users", catalog = "meritbank")
+
+public class Users     {
+//implements UserDetails  {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -29,14 +39,15 @@ public class Users {
 	private boolean isactive;
 	private String roles;
 
-	//Mapped to accountHolder 
-	@OneToOne
+	
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "users")
+	@JsonIgnore 
 	@JoinColumn(name= "accountholders" ,referencedColumnName= "id")
 	AccountHolder accountHolder;
+	/*
+	 * In post man add accountholder, same as accountid
+	 */
 
-	
-	
-	
 	public Users() {
 		
 		this.username = " ";
@@ -56,6 +67,7 @@ public class Users {
 	public Integer getId() {
 		return id;
 	}
+	
 	public void setId(Integer id) {
 		this.id = id;
 	}
@@ -94,7 +106,33 @@ public class Users {
 	public void setAccountHolder(AccountHolder accountHolder) {
 		this.accountHolder = accountHolder;
 	}
-	
+	/*
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+*/	
 	
 	
 	
